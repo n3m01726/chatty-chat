@@ -1,0 +1,195 @@
+@use '../base/variables' as *;
+
+/* ==========================================================================
+   Input Toolbar (barre d'outils au-dessus du champ de message)
+   ========================================================================== */
+
+.input-toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 8px 20px 0;
+  background: $color-bg-light;
+  border-top: 1px solid #e0e0e0;
+  transition: background $transition-normal, border-color $transition-normal;
+
+  body.dark-mode & {
+    background: $color-bg-dark;
+    border-top-color: #3a3a52;
+  }
+}
+
+.toolbar-btn {
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: $border-radius-sm;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all $transition-fast;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  &.active {
+    background: $color-primary;
+    color: white;
+    border-color: $color-primary;
+  }
+
+  body.dark-mode & {
+    border-color: #4a4a62;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+}
+
+/* ==========================================================================
+   Ligne d'entrée de message (textarea + bouton envoyer)
+   ========================================================================== */
+
+.input-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  padding: 0 20px;
+
+  textarea {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: $border-radius-pill;
+    font-size: 15px;
+    font-family: inherit;
+    resize: none;
+    min-height: 50px;
+    max-height: 150px;
+    transition: border-color $transition-normal, background $transition-normal, color $transition-normal;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+    }
+
+    body.dark-mode & {
+      background: #3a3a52;
+      border-color: #4a4a62;
+      color: $color-text-light;
+    }
+  }
+
+  // Bouton d'envoi (déjà couvert par le mixin primary-button, mais on garde un sélecteur explicite si besoin)
+  button {
+    padding: 15px 30px;
+    background: $primary-gradient;
+    color: white;
+    border: none;
+    border-radius: $border-radius-pill;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+}
+
+/* ==========================================================================
+   Hint Markdown (petit texte d'aide sous le champ)
+   ========================================================================== */
+
+.markdown-hint {
+  padding: 0 20px 8px;
+  background: $color-bg-light;
+  transition: background $transition-normal;
+
+  body.dark-mode & {
+    background: $color-bg-dark;
+  }
+
+  small {
+    color: #999;
+    font-size: 11px;
+  }
+}
+
+/* ==========================================================================
+   Prévisualisation des pièces jointes / GIFs (juste au-dessus du champ)
+   ========================================================================== */
+
+.message-preview {
+  display: flex;
+  gap: 10px;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid #e0e0e0;
+  flex-wrap: wrap;
+  transition: background $transition-normal, border-color $transition-normal;
+
+  body.dark-mode & {
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom-color: #3a3a52;
+  }
+
+  .preview-item {
+    position: relative;
+    background: $color-bg-light;
+    padding: 8px 12px;
+    border-radius: $border-radius-sm;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    body.dark-mode & {
+      background: #3a3a52;
+    }
+
+    small {
+      font-size: 11px;
+      color: #999;
+    }
+  }
+
+  .preview-gif {
+    padding: 4px;
+
+    img {
+      max-width: 100px;
+      border-radius: 4px;
+      display: block;
+    }
+  }
+
+  .preview-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    border-radius: $border-radius-full;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+  }
+}

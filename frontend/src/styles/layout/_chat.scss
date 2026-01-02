@@ -1,0 +1,89 @@
+@use '../base/variables' as *;
+
+/* ==========================================================================
+   Conteneur principal du chat
+   ========================================================================== */
+
+.chat-container {
+  background: $color-bg-light;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-md;
+  width: 100%;
+  max-width: 800px;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: background $transition-normal;
+
+  body.dark-mode & {
+    background: $color-bg-dark;
+  }
+}
+
+/* ==========================================================================
+   Header du chat
+   ========================================================================== */
+
+.chat-header {
+  background: $primary-gradient;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  transition: background $transition-normal;
+
+  body.dark-mode & {
+    background: $dark-gradient;
+  }
+
+  h2 {
+    font-size: 24px;
+    margin: 0;
+  }
+
+  /* Informations utilisateur + compteur */
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  /* Compteur d'utilisateurs connectés */
+  .user-count {
+    font-size: 14px;
+    opacity: 0.9;
+  }
+}
+
+/* ==========================================================================
+   Conteneur des messages (déjà scroll personnalisé via _scrollbars.scss)
+   ========================================================================== */
+
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background: #f8f9fa;
+  transition: background $transition-normal;
+
+  body.dark-mode & {
+    background: #1a1a2e;
+  }
+}
+
+/* ==========================================================================
+   Zone d'entrée de message (toolbar + input + bouton)
+   ========================================================================== */
+
+.chat-input-area {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+/* La toolbar (bold, italic, GIF, etc.) est stylée dans _toolbar.scss */
+/* L'input row et le hint sont dans _toolbar.scss */
+/* Le formulaire principal est dans _forms.scss et _buttons.scss */

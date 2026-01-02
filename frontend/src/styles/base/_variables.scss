@@ -1,0 +1,22 @@
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$dark-gradient: linear-gradient(135deg, #4a4a62 0%, #3a3a52 100%);
+$dark-bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+
+$color-primary: #667eea;
+$color-primary-dark: #764ba2;
+$color-text-light: #e0e0e0;
+$color-text-dark: #333;
+$color-bg-light: white;
+$color-bg-dark: #2d2d44;
+
+$border-radius-sm: 8px;
+$border-radius-md: 12px;
+$border-radius-lg: 16px;
+$border-radius-pill: 25px;
+$border-radius-full: 50%;
+
+$transition-fast: 0.2s ease;
+$transition-normal: 0.3s ease;
+
+$shadow-md: 0 20px 60px rgba(0, 0, 0, 0.3);
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);

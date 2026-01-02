@@ -1,0 +1,101 @@
+@use '../base/variables' as *;
+
+/* ==========================================================================
+   Scrollbars personnalisées – WebKit (Chrome, Safari, Edge)
+   ========================================================================== */
+
+/* Conteneurs principaux avec scrollbar */
+.messages-container,
+.gif-grid,
+.modal-content,
+.attachment-body,
+.gif-picker-modal,
+.profile-modal .modal-content {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px; /* Pour les scrollbars horizontales si besoin */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+
+    body.dark-mode & {
+      background: #2d2d44;
+    }
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: #999;
+    }
+
+    body.dark-mode & {
+      background: #4a4a62;
+
+      &:hover {
+        background: #5a5a72;
+      }
+    }
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+/* ==========================================================================
+   Variante plus fine pour les petits conteneurs (ex: bio textarea si scroll)
+   ========================================================================== */
+
+.scroll-thin {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+  }
+}
+
+/* ==========================================================================
+   Firefox – Support partiel via scrollbar-width & scrollbar-color
+   ========================================================================== */
+
+@supports (scrollbar-width: thin) {
+  .messages-container,
+  .gif-grid,
+  .modal-content,
+  .attachment-body,
+  .gif-picker-modal,
+  .profile-modal .modal-content {
+    scrollbar-width: thin;
+
+    scrollbar-color: #ccc #f1f1f1;
+
+    body.dark-mode & {
+      scrollbar-color: #4a4a62 #2d2d44;
+    }
+  }
+
+  .scroll-thin {
+    scrollbar-width: thin;
+  }
+}
+
+/* ==========================================================================
+   Option : Masquer complètement la scrollbar tout en gardant le scroll
+   ========================================================================== */
+
+.scroll-hidden {
+  -ms-overflow-style: none;  /* IE et Edge */
+  scrollbar-width: none;     /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+}

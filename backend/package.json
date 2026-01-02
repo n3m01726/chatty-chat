@@ -1,0 +1,23 @@
+{
+    "name": "chat-backend",
+    "version": "1.0.0",
+    "description": "Serveur Socket.io pour chat temps réel",
+    "main": "src/server.js",
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js"
+    },
+    "dependencies": {
+        "better-sqlite3": "^12.5.0",
+        "cors": "^2.8.5",
+        "express": "^4.18.2",
+        "multer": "^2.0.2",
+        "node-cron": "^4.2.1",
+        "node-fetch": "^3.3.2",
+        "react-markdown": "^10.1.0",
+        "socket.io": "^4.6.1"
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.1"
+    }
+}

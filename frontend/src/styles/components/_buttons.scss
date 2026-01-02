@@ -1,0 +1,346 @@
+@use '../base/variables' as *;
+
+/* ==========================================================================
+   Mixins de boutons réutilisables
+   ========================================================================== */
+
+/* Bouton primaire – Gradient violet/bleu (principal call-to-action) */
+@mixin btn-primary {
+  background: $primary-gradient;
+  color: white;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform $transition-fast, opacity $transition-fast;
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+/* Bouton secondaire – Fond neutre, texte sombre/clair selon thème */
+@mixin btn-secondary {
+  background: #e0e0e0;
+  color: #333;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform $transition-fast, background $transition-fast;
+
+  &:hover {
+    transform: translateY(-2px);
+    background: darken(#e0e0e0, 8%);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  body.dark-mode & {
+    background: #3a3a52;
+    color: $color-text-light;
+
+    &:hover {
+      background: lighten(#3a3a52, 8%);
+    }
+  }
+}
+
+/* Bouton édition – Contour violet, fond transparent */
+@mixin btn-edit {
+  background: transparent;
+  color: $color-primary;
+  border: 1px solid $color-primary;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    transform: translateY(-2px);
+    background: rgba($color-primary, 0.1);
+  }
+
+  body.dark-mode & {
+    color: #9b8ff5;
+    border-color: #9b8ff5;
+
+    &:hover {
+      background: rgba(#9b8ff5, 0.15);
+    }
+  }
+}
+
+/* Bouton danger / suppression – Rouge */
+@mixin btn-danger {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* Taille standard commune */
+@mixin btn-base {
+  padding: 10px 20px;
+  border-radius: $border-radius-sm;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+}
+
+/* ==========================================================================
+   Classes de boutons génériques
+   ========================================================================== */
+
+.btn {
+  @include btn-base;
+  text-decoration: none;
+
+  &.btn-primary {
+    @include btn-primary;
+  }
+
+  &.btn-secondary {
+    @include btn-secondary;
+  }
+
+  &.btn-edit {
+    @include btn-edit;
+  }
+
+  &.btn-danger,
+  &.btn-clear {
+    @include btn-danger;
+  }
+
+  /* Variantes de taille */
+  &.btn-small {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  &.btn-large {
+    padding: 15px 30px;
+    font-size: 16px;
+  }
+
+  /* Avec icône uniquement (ex: close, remove) */
+  &.btn-icon {
+    padding: 8px;
+    width: 36px;
+    height: 36px;
+    border-radius: $border-radius-full;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
+
+/* ==========================================================================
+   Boutons spécifiques de l'application
+   ========================================================================== */
+
+/* Boutons dans l'écran de connexion */
+.join-screen button {
+  @include btn-base;
+  @include btn-primary;
+  padding: 15px;
+  font-size: 16px;
+  width: 100%;
+}
+
+/* Bouton d'envoi de message */
+.message-input-form button {
+  @include btn-primary;
+  padding: 15px 30px;
+  border-radius: $border-radius-pill;
+  font-size: 15px;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* Boutons dans la toolbar (ex: bold, italic, GIF) */
+.toolbar-btn {
+  @include btn-base;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  font-size: 14px;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  &.active {
+    background: $color-primary;
+    color: white;
+    border-color: $color-primary;
+  }
+
+  body.dark-mode & {
+    border-color: #4a4a62;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+}
+
+/* Boutons dans le GIF picker et attachment */
+.gif-search-form button {
+  @include btn-primary;
+  padding: 10px 15px;
+  border-radius: $border-radius-sm;
+}
+
+.attachment-actions button {
+  @include btn-base;
+
+  &.btn-secondary {
+    @include btn-secondary;
+  }
+
+  &.btn-primary {
+    @include btn-primary;
+  }
+}
+
+/* Boutons d'action sur message (supprimer) */
+.btn-delete-message {
+  @include btn-danger;
+  padding: 4px 8px;
+  font-size: 12px;
+  opacity: 0.6;
+  border: 1px solid rgba(231, 76, 60, 0.3);
+
+  &:hover {
+    opacity: 1;
+    background: rgba(231, 76, 60, 0.1);
+    transform: none;
+  }
+}
+
+.btn-confirm-delete {
+  @include btn-danger;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.btn-cancel-delete {
+  background: #95a5a6;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &:hover {
+    background: #7f8c8d;
+  }
+}
+
+/* Boutons dans le profil */
+.profile-actions .btn-secondary {
+  @include btn-secondary;
+}
+
+.bio-actions {
+  .btn-edit {
+    @include btn-edit;
+  }
+
+  .btn-primary {
+    @include btn-primary;
+  }
+
+  button {
+    @include btn-secondary;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+/* Bouton toggle dark mode */
+.dark-mode-toggle {
+  background: rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: $border-radius-full;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all $transition-normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    transform: scale(1.1);
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  body.dark-mode & {
+    background: rgba(255, 255, 255, 0.1);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+
+/* Boutons de fermeture modal */
+.modal-close {
+  background: rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: $border-radius-full;
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all $transition-fast;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.2);
+    transform: rotate(90deg);
+  }
+
+  body.dark-mode & {
+    background: rgba(255, 255, 255, 0.1);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+}

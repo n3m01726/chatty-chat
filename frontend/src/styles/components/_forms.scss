@@ -1,0 +1,252 @@
+@use '../base/variables' as *;
+
+/* ==========================================================================
+   Styles de base pour tous les éléments de formulaire
+   ========================================================================== */
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: 15px;
+  transition: border-color $transition-normal, background $transition-normal, color $transition-normal;
+  outline: none;
+
+  &:focus {
+    border-color: $color-primary;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: #999;
+    opacity: 1;
+  }
+
+  /* Light mode par défaut */
+  background: white;
+  border: 2px solid #e0e0e0;
+  color: $color-text-dark;
+
+  /* Dark mode */
+  body.dark-mode & {
+    background: #3a3a52;
+    border-color: #4a4a62;
+    color: $color-text-light;
+
+    &::placeholder {
+      color: #888;
+    }
+
+    &:focus {
+      border-color: $color-primary;
+    }
+  }
+}
+
+/* ==========================================================================
+   Input texte standard (utilisé partout)
+   ========================================================================== */
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="search"] {
+  padding: 12px 15px;
+  border-radius: $border-radius-sm;
+  width: 100%;
+
+  /* Spécifique aux champs plus grands (ex: recherche GIF) */
+  &.large {
+    padding: 14px 18px;
+    font-size: 16px;
+  }
+}
+
+/* ==========================================================================
+   Textarea (message input, bio edit, etc.)
+   ========================================================================== */
+
+textarea {
+  padding: 12px 15px;
+  border-radius: $border-radius-sm;
+  width: 100%;
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+
+  /* Dans la zone de message */
+  &.message-textarea {
+    border-radius: $border-radius-pill;
+    padding: 14px 18px;
+    font-size: 15px;
+    min-height: 50px;
+    max-height: 150px;
+  }
+
+  /* Dans l'édition de bio */
+  &.bio-textarea {
+    min-height: 120px;
+    font-size: 14px;
+  }
+}
+
+/* ==========================================================================
+   Select (dropdowns)
+   ========================================================================== */
+
+select {
+  padding: 10px 12px;
+  border-radius: $border-radius-sm;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  appearance: none;
+  cursor: pointer;
+
+  /* Expiration selector dans attachments */
+  &.expiration-select {
+    padding: 12px 40px 12px 14px;
+    background-position: right 16px center;
+  }
+
+  body.dark-mode & {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23aaa' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+  }
+}
+
+/* ==========================================================================
+   Labels
+   ========================================================================== */
+
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  color: #666;
+
+  body.dark-mode & {
+    color: #aaa;
+  }
+}
+
+/* ==========================================================================
+   Groupes de formulaire (utilisés dans profil edit, etc.)
+   ========================================================================== */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+
+  &.form-group-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    > *:last-child {
+      flex: 1;
+      min-width: 200px;
+    }
+  }
+
+  small {
+    font-size: 12px;
+    color: #999;
+    text-align: right;
+    margin-top: 4px;
+
+    body.dark-mode & {
+      color: #777;
+    }
+  }
+}
+
+/* ==========================================================================
+   Formulaires spécifiques
+   ========================================================================== */
+
+/* Écran de connexion */
+.join-screen {
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    input {
+      padding: 15px;
+      font-size: 16px;
+    }
+  }
+}
+
+/* Formulaire d'envoi de message */
+.message-input-form {
+  input {
+    flex: 1;
+    padding: 15px;
+    border-radius: $border-radius-pill;
+    font-size: 15px;
+  }
+}
+
+/* Formulaire de recherche GIF */
+.gif-search-form {
+  input {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+}
+
+/* Formulaire d'édition de profil */
+.profile-edit-form {
+  .form-group {
+    input,
+    textarea,
+    select {
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+  }
+
+  .color-picker-row {
+    input[type="color"] {
+      width: 60px;
+      height: 40px;
+      padding: 2px;
+      border: none;
+      border-radius: $border-radius-sm;
+      cursor: pointer;
+    }
+
+    input[type="text"] {
+      flex: 1;
+    }
+  }
+}
+
+/* ==========================================================================
+   États spéciaux
+   ========================================================================== */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: $color-text-dark;
+  -webkit-box-shadow: 0 0 0 1000px white inset;
+  transition: background-color 5000s ease-in-out 0s;
+
+  body.dark-mode & {
+    -webkit-text-fill-color: $color-text-light;
+    -webkit-box-shadow: 0 0 0 1000px #3a3a52 inset;
+  }
+}
