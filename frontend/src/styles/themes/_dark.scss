@@ -1,12 +1,7 @@
 @use '../base/variables' as *;
 
-/* ==========================================================================
-   Thème sombre – Appliqué quand .dark-mode est présent sur <body>
-   ========================================================================== */
-
 body.dark-mode {
-  background: $dark-bg-gradient; // linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)
-
-  // Optionnel : renforcement de la transition fluide
+  background: $dark-bg-gradient;
   transition: background $transition-normal;
+  color:$color-text-dark;
 }

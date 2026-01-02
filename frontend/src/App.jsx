@@ -110,9 +110,6 @@ function App() {
     
   
     <div className="app">
-    <div className="header">
-    feruifgberuibfuerfb
-  </div>
       <ChatContainer 
         username={username}
         userCount={userCount}

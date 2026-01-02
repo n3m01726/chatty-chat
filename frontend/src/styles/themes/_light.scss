@@ -1,9 +1,5 @@
 @use '../base/variables' as *;
 
-/* ==========================================================================
-   Thème clair – Fond principal du <body>
-   ========================================================================== */
-
 body {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: $primary-gradient;
 }

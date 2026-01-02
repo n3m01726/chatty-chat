@@ -1,33 +1,20 @@
-// ==========================================================================
-//  index.scss – Point d’entrée principal
-//  Ordre d’import conçu pour éviter les dépendances circulaires
-//  et garantir que les variables/animations sont disponibles partout
-// ==========================================================================
-
-// --------------------------------------------------------------------------
-//  Base – Fondations globales (doivent être en premier)
-// --------------------------------------------------------------------------
+// Base
 @use 'base/reset';
 @use 'base/variables';
 @use 'base/typography';
 @use 'base/animations';
+@use 'base/global';
 
-// --------------------------------------------------------------------------
-//  Thèmes – Fonds du body et transitions globales
-// --------------------------------------------------------------------------
+// Themes
 @use 'themes/light';
 @use 'themes/dark';
 
-// --------------------------------------------------------------------------
-//  Layout – Structure principale de l'application
-// --------------------------------------------------------------------------
+// Layout
 @use 'layout/app';
 @use 'layout/chat';
 @use 'layout/modals';
 
-// --------------------------------------------------------------------------
-//  Components – Éléments réutilisables partout
-// --------------------------------------------------------------------------
+// Components
 @use 'components/buttons';
 @use 'components/forms';
 @use 'components/avatars';
@@ -35,9 +22,7 @@
 @use 'components/toolbar';
 @use 'components/scrollbars';
 
-// --------------------------------------------------------------------------
-//  Features – Interfaces et modals spécifiques
-// --------------------------------------------------------------------------
+// Features
 @use 'features/join-screen';
 @use 'features/profile';
 @use 'features/gif-picker';

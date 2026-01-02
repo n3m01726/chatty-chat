@@ -1,9 +1,5 @@
 @use '../base/variables' as *;
 
-/* ==========================================================================
-   Overlay commun à tous les modals
-   ========================================================================== */
-
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -13,64 +9,30 @@
   justify-content: center;
   z-index: 1000;
   animation: fadeIn $transition-fast ease-out;
-  backdrop-filter: blur(4px); // Effet subtil de flou d'arrière-plan
 }
-
-/* ==========================================================================
-   Conteneur principal du contenu modal
-   ========================================================================== */
 
 .modal-content {
   background: $color-bg-light;
   border-radius: $border-radius-lg;
-  padding: 0; // On laisse les paddings internes aux features spécifiques
-  max-width: 90%;
-  width: 500px; // Valeur par défaut, overridée par les modals spécifiques si besoin
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
   position: relative;
-  overflow: hidden;
-  box-shadow: $shadow-md;
   animation: slideUp $transition-normal ease-out;
 
   body.dark-mode & {
     background: $color-bg-dark;
     color: $color-text-light;
   }
-
-  // Scrollbar personnalisée pour le contenu si trop long
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-
-    body.dark-mode & {
-      background: rgba(255, 255, 255, 0.2);
-    }
-  }
 }
-
-/* ==========================================================================
-   Bouton de fermeture commun (utilisé dans tous les modals)
-   ========================================================================== */
 
 .modal-close {
   position: absolute;
   top: 15px;
   right: 15px;
-  z-index: 10;
   background: rgba(0, 0, 0, 0.1);
-  color: #666;
   border: none;
   border-radius: $border-radius-full;
   width: 32px;
@@ -84,47 +46,14 @@
 
   &:hover {
     background: rgba(0, 0, 0, 0.2);
-    color: #333;
     transform: rotate(90deg);
   }
 
   body.dark-mode & {
     background: rgba(255, 255, 255, 0.1);
-    color: #aaa;
 
     &:hover {
       background: rgba(255, 255, 255, 0.2);
-      color: #fff;
     }
   }
-}
-
-/* ==========================================================================
-   Overrides spécifiques pour certains modals (taille, largeur)
-   ========================================================================== */
-
-// Profil modal – plus large
-.profile-modal .modal-content {
-  max-width: 600px;
-  width: 95%;
-}
-
-// GIF Picker – largeur intermédiaire
-.gif-picker-modal {
-  width: 90%;
-  max-width: 600px;
-}
-
-// Attachment Uploader – plus étroit
-.attachment-uploader-modal {
-  max-width: 500px;
-}
-
-/* ==========================================================================
-   Accessibilité : focus visible sur le bouton close au clavier
-   ========================================================================== */
-
-.modal-close:focus-visible {
-  outline: 2px solid $color-primary;
-  outline-offset: 2px;
 }

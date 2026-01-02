@@ -9,11 +9,25 @@
   color: white;
   flex-shrink: 0;
   user-select: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: $shadow-sm;
 
-  &-small { width: 32px; height: 32px; font-size: 12px; }
-  &-medium { width: 40px; height: 40px; font-size: 16px; }
-  &-large { width: 56px; height: 56px; font-size: 20px; }
+  &-small {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  &-medium {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  &-large {
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+  }
 
   &-clickable {
     cursor: pointer;
@@ -23,4 +37,16 @@
       transform: scale(1.1);
     }
   }
+}
+
+.message-avatar-img,
+.header-avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: $border-radius-full;
+  object-fit: cover;
+}
+
+.header-avatar-img {
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }

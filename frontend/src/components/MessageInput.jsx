@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { GifPicker } from './GifPicker';
 import { AttachmentUploader } from './AttachmentUploader';
 import { TYPING_TIMEOUT, MAX_MESSAGE_LENGTH } from '../utils/constants';
-
+import {CodeXml, Upload, ImagePlay} from "lucide-react";
 /**
  * Formulaire d'envoi de message avec options enrichies
  */
@@ -128,7 +128,7 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
             onClick={() => setUseMarkdown(!useMarkdown)}
             title="Markdown (gras, italique, liens...)"
           >
-            {useMarkdown ? '📝' : 'Md'}
+            {useMarkdown ? '📝' : <CodeXml  size={20} />}
           </button>
           <button
             type="button"
@@ -136,7 +136,7 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
             onClick={() => setShowGifPicker(true)}
             title="Ajouter un GIF"
           >
-            🎬
+            <ImagePlay size={20}/>
           </button>
           <button
             type="button"
@@ -144,7 +144,7 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
             onClick={() => setShowAttachmentUploader(true)}
             title="Ajouter une image/vidéo"
           >
-            📎
+            <Upload  size={20} />
           </button>
         </div>
 

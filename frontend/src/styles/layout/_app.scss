@@ -1,19 +1,10 @@
 @use '../base/variables' as *;
 
-/* ==========================================================================
-   Body global – Fond et hauteur
-   ========================================================================== */
-
 body {
-  font-family: 'Whitney', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
   height: 100vh;
   overflow: hidden;
   transition: background $transition-normal;
 }
-
-/* ==========================================================================
-   Conteneur principal de l'application
-   ========================================================================== */
 
 .app {
   display: flex;
@@ -21,29 +12,4 @@ body {
   align-items: center;
   height: 100vh;
   padding: 20px;
-}
-
-/* ==========================================================================
-   États de visibilité des écrans principaux
-   ========================================================================== */
-
-// Par défaut, l'écran de connexion est visible
-.join-screen {
-  display: block;
-}
-
-// Quand l'utilisateur est connecté, on cache le join-screen et on affiche le chat
-.app.logged-in {
-  .join-screen {
-    display: none;
-  }
-
-  .chat-container {
-    display: flex;
-  }
-}
-
-// Au départ, le chat est caché
-.chat-container {
-  display: none;
 }

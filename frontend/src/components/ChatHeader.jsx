@@ -15,7 +15,7 @@ export const ChatHeader = ({ username, userCount, darkMode, onToggleDarkMode, on
 
   return (
     <header className="chat-header">
-      <h2>💬 Salon Principal</h2>
+      <h2>#general-chat</h2>
       <div className="user-info">
         <DarkModeToggle darkMode={darkMode} onToggle={onToggleDarkMode} />
         <div 

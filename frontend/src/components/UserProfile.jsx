@@ -1,7 +1,7 @@
 // components/UserProfile.jsx
 import React, { useState, useEffect } from 'react';
 import { Avatar } from './Avatar';
-import { Pen } from 'lucide-react';
+import { Pen, Plus, Hourglass, Camera } from 'lucide-react';
 
 import { 
   SOCKET_URL, 
@@ -199,8 +199,8 @@ export const UserProfile = ({
           }}
         >
           {isOwn && editing && (
-            <label className="upload-banner-btn">
-              {uploadingBanner ? '⏳' : ''} Upload your cover
+            <label className="upload-banner-btn icon-text">
+              {uploadingBanner ? <Hourglass size={20}/> : <Plus size={20}/>} Upload your cover
               <input 
                 type="file" 
                 accept="image/*" 
@@ -221,7 +221,7 @@ export const UserProfile = ({
             )}
             {isOwn && editing && (
               <label className="upload-avatar-btn">
-                {uploadingAvatar ? '⏳' : '📷'}
+                {uploadingAvatar ? <Hourglass size={20} /> : <Camera size={20} />}
                 <input 
                   type="file" 
                   accept="image/*" 
@@ -253,7 +253,7 @@ export const UserProfile = ({
           <div className="profile-actions">
             {!editing ? (
               <button onClick={() => setEditing(true)} className="btn-primary icon-text">
-                <Pen size={16}/>  Modifier le profil 
+                <Pen size={20}/>  Modifier le profil 
               </button>
             ) : (
               <>
@@ -284,6 +284,34 @@ export const UserProfile = ({
         {/* Sections éditables */}
         {editing ? (
           <div className="profile-edit-form">
+   <div className="status">
+            {/* Status */}
+            <div className="form-group">
+              <label>Statut</label>
+              <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                {USER_STATUSES.map(s => (
+                  <option key={s.value} value={s.value}>
+                    {s.icon} {s.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Status Text */}
+
+            <div className="form-group">
+              <label>Message de statut</label>
+              <input
+                type="text"
+                value={statusText}
+                onChange={(e) => setStatusText(e.target.value)}
+                placeholder="Que fais-tu en ce moment ?"
+                maxLength={MAX_STATUS_LENGTH}
+              />
+              <small>{statusText.length}/{MAX_STATUS_LENGTH}</small>
+            </div>
+</div>
+ 
             {/* Display Name */}
             <div className="form-group">
               <label>Nom d'affichage</label>
@@ -322,30 +350,7 @@ export const UserProfile = ({
               <small>{bio.length}/{MAX_BIO_LENGTH}</small>
             </div>
 
-            {/* Status */}
-            <div className="form-group">
-              <label>Statut</label>
-              <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                {USER_STATUSES.map(s => (
-                  <option key={s.value} value={s.value}>
-                    {s.icon} {s.label}
-                  </option>
-                ))}
-              </select>
-            </div>
 
-            {/* Status Text */}
-            <div className="form-group">
-              <label>Message de statut</label>
-              <input
-                type="text"
-                value={statusText}
-                onChange={(e) => setStatusText(e.target.value)}
-                placeholder="Que fais-tu en ce moment ?"
-                maxLength={MAX_STATUS_LENGTH}
-              />
-              <small>{statusText.length}/{MAX_STATUS_LENGTH}</small>
-            </div>
 
             {/* Custom Color */}
             <div className="form-group">

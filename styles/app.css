@@ -6,7 +6,7 @@
   }
   
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    font-family: 'Whitney', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     height: 100vh;
     overflow: hidden;
@@ -1089,12 +1089,10 @@
     gap: 4px;
     padding: 8px 20px 0;
     background: white;
-    border-top: 1px solid #e0e0e0;
   }
   
   body.dark-mode .input-toolbar {
     background: #2d2d44;
-    border-top-color: #3a3a52;
   }
   
   .toolbar-btn {

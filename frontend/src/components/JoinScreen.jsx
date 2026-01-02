@@ -20,7 +20,6 @@ export const JoinScreen = ({ onJoin, darkMode, onToggleDarkMode }) => {
 
   return (
     <div className="join-screen">
-      <DarkModeToggle darkMode={darkMode} onToggle={onToggleDarkMode} />
       
       <h1>💬 Chat en Temps Réel</h1>
       

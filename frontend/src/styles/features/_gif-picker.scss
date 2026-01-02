@@ -1,9 +1,5 @@
 @use '../base/variables' as *;
 
-/* ==========================================================================
-   GIF Picker – Overlay global
-   ========================================================================== */
-
 .gif-picker-overlay {
   position: fixed;
   inset: 0;
@@ -14,10 +10,6 @@
   z-index: 1000;
   animation: fadeIn $transition-fast ease-out;
 }
-
-/* ==========================================================================
-   GIF Picker – Modal principale
-   ========================================================================== */
 
 .gif-picker-modal {
   background: $color-bg-light;
@@ -35,16 +27,12 @@
   }
 }
 
-/* ==========================================================================
-   En-tête du picker
-   ========================================================================== */
-
 .gif-picker-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid $color-border-light;
   flex-shrink: 0;
 
   body.dark-mode & {
@@ -55,35 +43,13 @@
     margin: 0;
     font-size: 20px;
   }
-
-  // Bouton de fermeture (réutilise le style modal-close déjà défini dans _modals.scss)
-  .modal-close {
-    background: rgba(0, 0, 0, 0.1);
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.2);
-      transform: rotate(90deg);
-    }
-
-    body.dark-mode & {
-      background: rgba(255, 255, 255, 0.1);
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.2);
-      }
-    }
-  }
 }
-
-/* ==========================================================================
-   Barre de recherche GIF
-   ========================================================================== */
 
 .gif-search-form {
   display: flex;
   gap: 8px;
   padding: 15px 20px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid $color-border-light;
   flex-shrink: 0;
 
   body.dark-mode & {
@@ -93,7 +59,7 @@
   input {
     flex: 1;
     padding: 10px 15px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid $color-border-light;
     border-radius: $border-radius-sm;
     font-size: 14px;
     transition: border-color $transition-normal;
@@ -105,7 +71,7 @@
 
     body.dark-mode & {
       background: #3a3a52;
-      border-color: #4a4a62;
+      border-color: $color-border-dark;
       color: $color-text-light;
 
       &::placeholder {
@@ -128,17 +94,8 @@
     &:hover {
       background: #5568d3;
     }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
   }
 }
-
-/* ==========================================================================
-   Grille des GIFs
-   ========================================================================== */
 
 .gif-grid {
   flex: 1;
@@ -168,8 +125,6 @@
   }
 }
 
-/* États vides ou chargement */
-
 .gif-loading,
 .gif-empty {
   grid-column: 1 / -1;
@@ -179,14 +134,10 @@
   font-size: 16px;
 }
 
-/* ==========================================================================
-   Pied de page du picker
-   ========================================================================== */
-
 .gif-picker-footer {
   padding: 10px 20px;
   text-align: center;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid $color-border-light;
   flex-shrink: 0;
 
   body.dark-mode & {
