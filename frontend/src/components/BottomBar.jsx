@@ -1,48 +1,63 @@
-// components/BottomBar.jsx
-import React, { useState } from 'react';
+// components/TopBar.jsx
+import React from 'react';
 import { Avatar } from './Avatar';
+import { DarkModeToggle } from './DarkModeToggle';
 import { SOCKET_URL } from '../utils/constants';
+import { Settings } from 'lucide-react';
 
 /**
- * Barre du bas ultra minimaliste
- * Gauche: Avatar (avec badges)
- * Droite: ⚙️ Settings
+ * Barre supérieure avec titre du canal et contrôles utilisateur
  */
-export const BottomBar = ({ username, userProfile, onAvatarClick, onSettingsClick }) => {
+export const BottomBar = ({ 
+  channelName = 'Général',
+  username, 
+  userProfile, 
+  darkMode,
+  onToggleDarkMode,
+  onAvatarClick, 
+  onSettingsClick 
+}) => {
   const apiUrl = SOCKET_URL.replace(/:\d+$/, ':3001');
   const avatarUrl = userProfile?.avatar_url ? `${apiUrl}${userProfile.avatar_url}` : null;
   const displayName = userProfile?.display_name || username;
 
   return (
-    <div className="bottom-bar">
-      {/* Avatar avec badges */}
-      <div 
-        className="bottom-bar-avatar clickable" 
-        onClick={onAvatarClick}
-        title={`${displayName} - Cliquer pour voir le profil`}
-      >
-        {avatarUrl ? (
-          <img 
-            src={avatarUrl} 
-            alt={displayName} 
-            className="bottom-bar-avatar-img"
-          />
-        ) : (
-          <Avatar username={username} size="small" />
-        )}
-        
-        {/* Badge statut */}
-        <span className={`status-badge status-${userProfile?.status || 'online'}`} />
-      </div>
+    <div className="navbar bottom">
+      {/* Gauche: Info du canal */}
+      <div className="top-bar-left">
+  {/* Avatar utilisateur */}
+               <div 
+          className="top-bar-avatar clickable" 
+          onClick={onAvatarClick}
+          title={`${displayName} - Voir le profil`}
+        >
+          {avatarUrl ? (
+            <img 
+              src={avatarUrl} 
+              alt={displayName} 
+              className="top-bar-avatar-img"
+            />
+          ) : (
+            <Avatar username={username} size="small" />
+          )}
+          <span className={`status-badge status-${userProfile?.status || 'online'}`} />
+        </div>
+        {/* Dark mode toggle */}
+        <div className="top-bar-control" title="Mode sombre">
+          <DarkModeToggle darkMode={darkMode} onToggle={onToggleDarkMode} />
+        </div>
 
-      {/* Settings */}
-      <button 
-        className="bottom-bar-settings"
-        onClick={onSettingsClick}
-        title="Paramètres"
-      >
-        ⚙️
-      </button>
+ 
+
+        {/* Settings */}
+        <button 
+          className="top-bar-settings"
+          onClick={onSettingsClick}
+          title="Paramètres"
+        >
+        <Settings size={20} />
+        </button>
+      </div>
     </div>
   );
 };

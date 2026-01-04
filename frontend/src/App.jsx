@@ -7,6 +7,7 @@ import { useSocket } from './hooks/useSocket';
 import { useDarkMode } from './hooks/useDarkMode';
 import { SOCKET_URL } from './utils/constants';
 import { BottomBar } from './components/BottomBar';
+import { TopBar } from './components/TopBar';
 import './styles/index.scss';
 
 console.log('🎯 App.jsx chargé');
@@ -110,7 +111,17 @@ function App() {
   return (
     
   
-    <div className="app">
+    <div classN ame="app">
+      <TopBar 
+        channelName="Général"
+        username={username}
+        userProfile={userProfile}
+        darkMode={darkMode}
+        onToggleDarkMode={toggleDarkMode}
+        onAvatarClick={() => handleUsernameClick(username)}
+        onSettingsClick={() => setProfileUser(username)} 
+        />
+
       <ChatContainer 
         username={username}
         userCount={userCount}
@@ -137,7 +148,15 @@ function App() {
         />
       )}
     
- <BottomBar />
+       <BottomBar
+        channelName="Général"
+        username={username}
+        userProfile={userProfile}
+        darkMode={darkMode}
+        onToggleDarkMode={toggleDarkMode}
+        onAvatarClick={() => handleUsernameClick(username)}
+        onSettingsClick={() => setProfileUser(username)} 
+        />
  </div>   
   );
 }

@@ -1,6 +1,5 @@
 // components/ChatContainer.jsx
 import React from 'react';
-import { ChatHeader } from './ChatHeader';
 import { MessageList } from './MessageList';
 import { TypingIndicator } from './TypingIndicator';
 import { MessageInput } from './MessageInput';
@@ -24,15 +23,6 @@ export const ChatContainer = ({
 }) => {
   return (
     <div className="chat-container">
-      <ChatHeader 
-        username={username}
-        userCount={userCount}
-        darkMode={darkMode}
-        onToggleDarkMode={onToggleDarkMode}
-        onUsernameClick={onUsernameClick}
-        userProfile={userProfile}
-      />
-
       <MessageList 
         messages={messages}
         currentUsername={username}

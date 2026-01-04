@@ -410,3 +410,275 @@ export const UserProfile = ({
     </div>
   );
 };
+
+/**
+ * Modal de profil utilisateur avec possibilité de supprimer avatar/cover
+ */
+export const ProfileModal = ({ 
+  username, 
+  userProfile, 
+  onClose, 
+  onUpdateProfile 
+}) => {
+  const apiUrl = SOCKET_URL.replace(/:\d+$/, ':3001');
+  
+  const [displayName, setDisplayName] = useState(userProfile?.display_name || username);
+  const [bio, setBio] = useState(userProfile?.bio || '');
+  const [status, setStatus] = useState(userProfile?.status || 'online');
+  const [avatarPreview, setAvatarPreview] = useState(
+    userProfile?.avatar_url ? `${apiUrl}${userProfile.avatar_url}` : null
+  );
+  const [coverPreview, setCoverPreview] = useState(
+    userProfile?.cover_url ? `${apiUrl}${userProfile.cover_url}` : null
+  );
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [coverFile, setCoverFile] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const avatarInputRef = useRef(null);
+  const coverInputRef = useRef(null);
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setAvatarFile(file);
+      const reader = new FileReader();
+      reader.onload = () => setAvatarPreview(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleCoverChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setCoverFile(file);
+      const reader = new FileReader();
+      reader.onload = () => setCoverPreview(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveAvatar = () => {
+    setAvatarPreview(null);
+    setAvatarFile(null);
+    if (avatarInputRef.current) {
+      avatarInputRef.current.value = '';
+    }
+  };
+
+  const handleRemoveCover = () => {
+    setCoverPreview(null);
+    setCoverFile(null);
+    if (coverInputRef.current) {
+      coverInputRef.current.value = '';
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSaving(true);
+
+    const formData = new FormData();
+    formData.append('display_name', displayName);
+    formData.append('bio', bio);
+    formData.append('status', status);
+
+    if (avatarFile) {
+      formData.append('avatar', avatarFile);
+    } else if (!avatarPreview && userProfile?.avatar_url) {
+      // L'utilisateur veut supprimer son avatar
+      formData.append('remove_avatar', 'true');
+    }
+
+    if (coverFile) {
+      formData.append('cover', coverFile);
+    } else if (!coverPreview && userProfile?.cover_url) {
+      // L'utilisateur veut supprimer son cover
+      formData.append('remove_cover', 'true');
+    }
+
+    try {
+      const response = await fetch(`${apiUrl}/api/profile`, {
+        method: 'POST',
+        body: formData,
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        const updatedProfile = await response.json();
+        onUpdateProfile(updatedProfile);
+        onClose();
+      } else {
+        alert('Erreur lors de la sauvegarde du profil');
+      }
+    } catch (error) {
+      console.error('Erreur:', error);
+      alert('Erreur de connexion');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal profile-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h3>👤 Mon profil</h3>
+          <button className="modal-close" onClick={onClose}>✕</button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="modal-body profile-form">
+          {/* Cover image */}
+          <div className="profile-cover-section">
+            <div 
+              className="profile-cover"
+              style={{
+                backgroundImage: coverPreview ? `url(${coverPreview})` : 'none'
+              }}
+            >
+              {!coverPreview && (
+                <div className="cover-placeholder">
+                  <span>Aucune bannière</span>
+                </div>
+              )}
+              <div className="cover-actions">
+                <input
+                  ref={coverInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleCoverChange}
+                  style={{ display: 'none' }}
+                  id="cover-input"
+                />
+                <label htmlFor="cover-input" className="btn-cover-action" title="Changer la bannière">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                  </svg>
+                </label>
+                {coverPreview && (
+                  <button
+                    type="button"
+                    className="btn-cover-action btn-remove"
+                    onClick={handleRemoveCover}
+                    title="Supprimer la bannière"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Avatar */}
+            <div className="profile-avatar-wrapper">
+              <div className="profile-avatar">
+                {avatarPreview ? (
+                  <img src={avatarPreview} alt={displayName} />
+                ) : (
+                  <Avatar username={username} size="large" />
+                )}
+                <div className="avatar-overlay">
+                  <input
+                    ref={avatarInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarChange}
+                    style={{ display: 'none' }}
+                    id="avatar-input"
+                  />
+                  <label htmlFor="avatar-input" className="btn-avatar-action" title="Changer l'avatar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                      <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                  </label>
+                  {avatarPreview && (
+                    <button
+                      type="button"
+                      className="btn-avatar-action btn-remove"
+                      onClick={handleRemoveAvatar}
+                      title="Supprimer l'avatar"
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Formulaire */}
+          <div className="profile-form-fields">
+            {/* Nom d'affichage */}
+            <div className="form-group">
+              <label htmlFor="display-name">Nom d'affichage</label>
+              <input
+                type="text"
+                id="display-name"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                maxLength={30}
+                placeholder={username}
+              />
+            </div>
+
+            {/* Bio */}
+            <div className="form-group">
+              <label htmlFor="bio">Bio</label>
+              <textarea
+                id="bio"
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                maxLength={200}
+                rows={3}
+                placeholder="Parle-nous de toi..."
+              />
+              <small className="form-hint">{bio.length} / 200</small>
+            </div>
+
+            {/* Statut */}
+            <div className="form-group">
+              <label>Statut</label>
+              <div className="status-options">
+                {[
+                  { value: 'online', label: 'En ligne', emoji: '🟢' },
+                  { value: 'away', label: 'Absent', emoji: '🟡' },
+                  { value: 'busy', label: 'Occupé', emoji: '🔴' },
+                  { value: 'offline', label: 'Hors ligne', emoji: '⚫' }
+                ].map((option) => (
+                  <label key={option.value} className="status-option">
+                    <input
+                      type="radio"
+                      name="status"
+                      value={option.value}
+                      checked={status === option.value}
+                      onChange={(e) => setStatus(e.target.value)}
+                    />
+                    <span className="status-option-content">
+                      <span>{option.emoji}</span>
+                      <span>{option.label}</span>
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="modal-footer">
+            <button type="button" className="btn-secondary" onClick={onClose}>
+              Annuler
+            </button>
+            <button type="submit" className="btn-primary" disabled={isSaving}>
+              {isSaving ? 'Sauvegarde...' : 'Sauvegarder'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};

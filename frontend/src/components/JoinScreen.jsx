@@ -1,148 +1,129 @@
 // components/JoinScreen.jsx
 import React, { useState, useEffect } from 'react';
-import { DarkModeToggle } from './DarkModeToggle';
 import { Avatar } from './Avatar';
-import { MAX_USERNAME_LENGTH, SOCKET_URL } from '../utils/constants';
+import { SOCKET_URL } from '../utils/constants';
 
 /**
- * Écran de connexion au chat avec mémoire du dernier utilisateur
+ * Écran de connexion avec historique
  */
-export const JoinScreen = ({ onJoin, darkMode, onToggleDarkMode }) => {
+export const JoinScreen = ({ onJoin }) => {
   const [username, setUsername] = useState('');
-  const [lastUser, setLastUser] = useState(null);
-  const [showNewUser, setShowNewUser] = useState(false);
-
-  const apiUrl = SOCKET_URL.replace(/:\d+$/, ':3001');
+  const [lastConnection, setLastConnection] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Charger le dernier utilisateur depuis localStorage
-    const lastUsername = localStorage.getItem('lastUsername');
-    if (lastUsername) {
-      loadLastUser(lastUsername);
-    } else {
-      setShowNewUser(true);
-    }
-  }, []);
-
-  const loadLastUser = async (username) => {
-    try {
-      const response = await fetch(`${apiUrl}/api/users/${username}`);
-      const data = await response.json();
-      
-      if (data.success) {
-        setLastUser(data.profile);
-      } else {
-        setShowNewUser(true);
+    // Récupérer la dernière connexion depuis localStorage
+    const stored = localStorage.getItem('lastConnection');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        setLastConnection(parsed);
+      } catch (e) {
+        console.error('Erreur parsing lastConnection:', e);
       }
-    } catch (error) {
-      console.error('Erreur chargement dernier utilisateur:', error);
-      setShowNewUser(true);
     }
-  };
+    setIsLoading(false);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const trimmedUsername = username.trim();
-    
-    if (trimmedUsername) {
-      localStorage.setItem('lastUsername', trimmedUsername);
-      onJoin(trimmedUsername);
+    if (!username.trim()) return;
+
+    // Sauvegarder la connexion
+    const connectionData = {
+      username: username.trim(),
+      timestamp: Date.now()
+    };
+    localStorage.setItem('lastConnection', JSON.stringify(connectionData));
+
+    onJoin(username.trim());
+  };
+
+  const handleUseLastConnection = () => {
+    if (lastConnection?.username) {
+      onJoin(lastConnection.username);
     }
   };
 
-  const handleResumeWithLastUser = () => {
-    if (lastUser) {
-      localStorage.setItem('lastUsername', lastUser.username);
-      onJoin(lastUser.username);
-    }
+  const formatLastSeen = (timestamp) => {
+    const now = Date.now();
+    const diff = now - timestamp;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+
+    if (minutes < 1) return 'il y a quelques instants';
+    if (minutes < 60) return `il y a ${minutes} minute${minutes > 1 ? 's' : ''}`;
+    if (hours < 24) return `il y a ${hours} heure${hours > 1 ? 's' : ''}`;
+    return `il y a ${days} jour${days > 1 ? 's' : ''}`;
   };
 
-  const formatLastSeen = (dateStr) => {
-    const date = new Date(dateStr);
-    const now = new Date();
-    const diffMs = now - date;
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
-
-    if (diffMins < 1) return "À l'instant";
-    if (diffMins < 60) return `Il y a ${diffMins} min`;
-    if (diffHours < 24) return `Il y a ${diffHours}h`;
-    if (diffDays === 1) return "Hier";
-    if (diffDays < 7) return `Il y a ${diffDays} jours`;
-    return date.toLocaleDateString('fr-FR');
-  };
-
-  if (lastUser && !showNewUser) {
-    const avatarUrl = lastUser.avatar_url ? `${apiUrl}${lastUser.avatar_url}` : null;
-    const displayName = lastUser.display_name || lastUser.username;
-
-    return (
-      <div className="join-screen">
-        <DarkModeToggle darkMode={darkMode} onToggle={onToggleDarkMode} />
-        
-        <h1>💬 Bon retour !</h1>
-        
-        <div className="last-user-card">
-        <div className="usercard">
-          {avatarUrl ? (
-            <img src={avatarUrl} alt={displayName} className="avatar-large" />
-          ) : (
-            <Avatar username={lastUser.username} size="large" />
-          )}
-          
-          <div className="last-user-info" style={{ marginLeft: '15px' }}>
-            <h2>{displayName}</h2>
-            <p className="last-user-username">known as @{lastUser.username}</p>
-            <p className="last-user-seen">
-              Dernière connexion : {formatLastSeen(lastUser.last_seen)}
-            </p>
-          </div>
-        </div>
-</div>
-        <button 
-          onClick={handleResumeWithLastUser}
-          className="btn-primary btn-resume"
-        >
-          Reprendre avec ce pseudo
-        </button>
-
-        <button 
-          onClick={() => setShowNewUser(true)}
-          className="btn-text"
-        >
-          Utiliser un autre pseudo
-        </button>
-      </div>
-    );
+  if (isLoading) {
+    return <div className="join-screen loading">Chargement...</div>;
   }
 
   return (
     <div className="join-screen">
-      <DarkModeToggle darkMode={darkMode} onToggle={onToggleDarkMode} />
-      
-      <h1>💬 Chat en Temps Réel</h1>
-      
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Entre ton pseudo..."
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          maxLength={MAX_USERNAME_LENGTH}
-          autoFocus
-        />
-        <button type="submit">Rejoindre</button>
-      </form>
+      <div className="join-container">
+        <div className="join-header">
+          <h1>💬 Chatty-Chat</h1>
+          <p>Rejoins la conversation en temps réel</p>
+        </div>
 
-      {lastUser && (
-        <button 
-          onClick={() => setShowNewUser(false)}
-          className="btn-text"
-        >
-          ← Retour
-        </button>
-      )}
+        {/* Dernière connexion */}
+        {lastConnection && (
+          <div className="last-connection-card">
+            <div className="last-connection-info">
+              <Avatar username={lastConnection.username} size="medium" />
+              <div className="last-connection-text">
+                <span className="last-connection-label">Dernière connexion</span>
+                <span className="last-connection-username">{lastConnection.username}</span>
+                <span className="last-connection-time">
+                  {formatLastSeen(lastConnection.timestamp)}
+                </span>
+              </div>
+            </div>
+            <button 
+              className="btn-reconnect"
+              onClick={handleUseLastConnection}
+              type="button"
+            >
+              Reconnecter
+            </button>
+          </div>
+        )}
+
+        {/* Formulaire */}
+        <form onSubmit={handleSubmit} className="join-form">
+          <div className="form-group">
+            <label htmlFor="username">
+              {lastConnection ? 'Ou choisis un nouveau pseudo' : 'Entre ton pseudo'}
+            </label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="MonPseudo123"
+              maxLength={20}
+              autoFocus={!lastConnection}
+              className="input-username"
+            />
+          </div>
+
+          <button 
+            type="submit" 
+            className="btn-join"
+            disabled={!username.trim()}
+          >
+            Rejoindre le chat
+          </button>
+        </form>
+
+        <div className="join-footer">
+          <small>En rejoignant, tu acceptes nos conditions d'utilisation</small>
+        </div>
+      </div>
     </div>
   );
 };

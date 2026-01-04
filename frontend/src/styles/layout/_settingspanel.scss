@@ -1,0 +1,346 @@
+// styles/SettingsPanel.scss
+
+.settings-panel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 400px;
+    background: white;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    animation: slideInRight 0.3s ease-out;
+  
+    @media (max-width: 768px) {
+      width: 100%;
+      max-width: 400px;
+    }
+  }
+  
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  .settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid #e5e7eb;
+    background: white;
+  
+    h3 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+  }
+  
+  .modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #6b7280;
+    transition: all 0.2s ease;
+  
+    &:hover {
+      background: #f3f4f6;
+      color: #1f2937;
+    }
+  }
+  
+  .settings-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+  
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+  
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 4px;
+  
+      &:hover {
+        background: #9ca3af;
+      }
+    }
+  }
+  
+  .settings-section {
+    padding: 16px 0;
+    border-bottom: 1px solid #f3f4f6;
+  
+    &:last-of-type {
+      border-bottom: none;
+    }
+  
+    h4 {
+      margin: 0 0 12px 0;
+      padding: 0 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+  
+  .settings-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    font-family: inherit;
+  
+    &:hover {
+      background: #f9fafb;
+    }
+  
+    &:active {
+      background: #f3f4f6;
+    }
+  
+    &.danger {
+      &:hover {
+        background: #fef2f2;
+  
+        .settings-icon,
+        .settings-button-label {
+          color: #ef4444;
+        }
+      }
+    }
+  }
+  
+  .settings-button-content {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .settings-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    width: 24px;
+    text-align: center;
+  }
+  
+  .settings-button-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  
+  .settings-button-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f2937;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .settings-button-desc {
+    font-size: 12px;
+    color: #6b7280;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .settings-arrow {
+    display: flex;
+    align-items: center;
+    color: #9ca3af;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  
+    .settings-button:hover & {
+      color: #667eea;
+      transform: translateX(2px);
+    }
+  
+    svg {
+      display: block;
+    }
+  }
+  
+  .settings-footer {
+    padding: 20px;
+    border-top: 1px solid #e5e7eb;
+    background: #f9fafb;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .settings-footer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  
+    small {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+  }
+  
+  .settings-footer-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #9ca3af;
+  
+    span {
+      color: #d1d5db;
+    }
+  }
+  
+  .settings-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  
+    &:hover {
+      color: #5568d3;
+      text-decoration: underline;
+    }
+  }
+  
+  // Dark mode
+  .dark-mode {
+    .settings-panel {
+      background: #1f2937;
+      box-shadow: -4px 0 24px rgba(0, 0, 0, 0.3);
+    }
+  
+    .settings-header {
+      background: #1f2937;
+      border-bottom-color: #374151;
+  
+      h3 {
+        color: #f3f4f6;
+      }
+    }
+  
+    .modal-close {
+      color: #9ca3af;
+  
+      &:hover {
+        background: #374151;
+        color: #e5e7eb;
+      }
+    }
+  
+    .settings-body {
+      &::-webkit-scrollbar-thumb {
+        background: #4b5563;
+  
+        &:hover {
+          background: #6b7280;
+        }
+      }
+    }
+  
+    .settings-section {
+      border-bottom-color: #374151;
+  
+      h4 {
+        color: #9ca3af;
+      }
+    }
+  
+    .settings-button {
+      &:hover {
+        background: #374151;
+      }
+  
+      &:active {
+        background: #2d3748;
+      }
+  
+      &.danger {
+        &:hover {
+          background: rgba(239, 68, 68, 0.1);
+  
+          .settings-icon,
+          .settings-button-label {
+            color: #f87171;
+          }
+        }
+      }
+    }
+  
+    .settings-button-label {
+      color: #e5e7eb;
+    }
+  
+    .settings-button-desc {
+      color: #9ca3af;
+    }
+  
+    .settings-arrow {
+      color: #6b7280;
+  
+      .settings-button:hover & {
+        color: #818cf8;
+      }
+    }
+  
+    .settings-footer {
+      background: #1f2937;
+      border-top-color: #374151;
+    }
+  
+    .settings-footer-info small {
+      color: #6b7280;
+    }
+  
+    .settings-footer-links {
+      color: #6b7280;
+  
+      span {
+        color: #4b5563;
+      }
+    }
+  
+    .settings-link {
+      color: #818cf8;
+  
+      &:hover {
+        color: #6366f1;
+      }
+    }
+  }
