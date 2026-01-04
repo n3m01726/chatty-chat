@@ -6,6 +6,7 @@ import { UserProfile } from './components/UserProfile';
 import { useSocket } from './hooks/useSocket';
 import { useDarkMode } from './hooks/useDarkMode';
 import { SOCKET_URL } from './utils/constants';
+import { BottomBar } from './components/BottomBar';
 import './styles/index.scss';
 
 console.log('🎯 App.jsx chargé');
@@ -135,8 +136,9 @@ function App() {
           onProfileUpdate={handleProfileUpdate}
         />
       )}
-    </div>
     
+ <BottomBar />
+ </div>   
   );
 }
 

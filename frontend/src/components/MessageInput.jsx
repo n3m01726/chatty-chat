@@ -3,9 +3,9 @@ import React, { useState, useRef } from 'react';
 import { GifPicker } from './GifPicker';
 import { AttachmentUploader } from './AttachmentUploader';
 import { TYPING_TIMEOUT, MAX_MESSAGE_LENGTH } from '../utils/constants';
-import {CodeXml, Upload, ImagePlay} from "lucide-react";
+
 /**
- * Formulaire d'envoi de message avec options enrichies
+ * Formulaire d'envoi de message avec toolbar moderne
  */
 export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
   const [inputMessage, setInputMessage] = useState('');
@@ -15,6 +15,7 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
   const [attachment, setAttachment] = useState(null);
   const [gifUrl, setGifUrl] = useState(null);
   const typingTimeoutRef = useRef(null);
+  const textareaRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -50,17 +51,24 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
     setGifUrl(null);
     onStopTyping();
     clearTimeout(typingTimeoutRef.current);
+    
+    // Remettre le focus sur l'input
+    textareaRef.current?.focus();
   };
 
   const handleChange = (e) => {
     setInputMessage(e.target.value);
 
-    // Émettre "typing" seulement si pas déjà en cours
+    // Auto-resize du textarea
+    const textarea = e.target;
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+
+    // Émettre "typing"
     if (!typingTimeoutRef.current) {
       onTyping();
     }
 
-    // Réinitialiser le timer
     clearTimeout(typingTimeoutRef.current);
     typingTimeoutRef.current = setTimeout(() => {
       onStopTyping();
@@ -71,16 +79,19 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
   const handleGifSelect = (url) => {
     setGifUrl(url);
     setShowGifPicker(false);
+    textareaRef.current?.focus();
   };
 
   const handleAttachmentReady = (attachmentData) => {
     setAttachment(attachmentData);
     setShowAttachmentUploader(false);
+    textareaRef.current?.focus();
   };
 
-  // Permettre Ctrl+Enter pour envoyer
+  // Ctrl+Enter pour envoyer
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && e.ctrlKey) {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
       handleSubmit(e);
     }
   };
@@ -93,9 +104,10 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
           <div className="message-preview">
             {attachment && (
               <div className="preview-item">
-                <span>📎 Fichier attaché</span>
+                <span className="preview-icon">📎</span>
+                <span className="preview-text">Fichier attaché</span>
                 {attachment.expiresIn && (
-                  <small>⏱️ Expire dans {attachment.expiresIn}h</small>
+                  <small>⏱️ {attachment.expiresIn}h</small>
                 )}
                 <button
                   type="button"
@@ -121,57 +133,65 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
           </div>
         )}
 
-        <div className="input-toolbar">
-          <button
-            type="button"
-            className={`toolbar-btn ${useMarkdown ? 'active' : ''}`}
-            onClick={() => setUseMarkdown(!useMarkdown)}
-            title="Markdown (gras, italique, liens...)"
-          >
-            {useMarkdown ? '📝' : <CodeXml  size={20} />}
-          </button>
-          <button
-            type="button"
-            className="toolbar-btn"
-            onClick={() => setShowGifPicker(true)}
-            title="Ajouter un GIF"
-          >
-            <ImagePlay size={20}/>
-          </button>
-          <button
-            type="button"
-            className="toolbar-btn"
-            onClick={() => setShowAttachmentUploader(true)}
-            title="Ajouter une image/vidéo"
-          >
-            <Upload  size={20} />
-          </button>
-        </div>
+        {/* Input principal */}
+        <div className="input-wrapper">
+          {/* Toolbar à gauche */}
+          <div className="input-toolbar-left">
+            <button
+              type="button"
+              className={`toolbar-icon ${useMarkdown ? 'active' : ''}`}
+              onClick={() => setUseMarkdown(!useMarkdown)}
+              title="Markdown (gras, italique, liens...)"
+            >
+              {useMarkdown ? '📝' : '📄'}
+            </button>
+            <button
+              type="button"
+              className="toolbar-icon"
+              onClick={() => setShowGifPicker(true)}
+              title="Ajouter un GIF"
+            >
+              🎬
+            </button>
+            <button
+              type="button"
+              className="toolbar-icon"
+              onClick={() => setShowAttachmentUploader(true)}
+              title="Ajouter une image/vidéo"
+            >
+              📎
+            </button>
+          </div>
 
-        <div className="input-row">
+          {/* Textarea */}
           <textarea
+            ref={textareaRef}
             placeholder={useMarkdown ? "Message (Markdown activé)..." : "Écris ton message..."}
             value={inputMessage}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             maxLength={MAX_MESSAGE_LENGTH}
             rows={1}
-            style={{
-              resize: 'none',
-              minHeight: '40px',
-              maxHeight: '120px',
-              overflow: 'auto'
-            }}
           />
-          <button type="submit" disabled={!inputMessage.trim() && !attachment && !gifUrl}>
-            Envoyer
+
+          {/* Bouton envoyer */}
+          <button 
+            type="submit" 
+            className="btn-send"
+            disabled={!inputMessage.trim() && !attachment && !gifUrl}
+            title="Envoyer (Ctrl+Enter)"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+            </svg>
           </button>
         </div>
 
+        {/* Hint Markdown */}
         {useMarkdown && (
           <div className="markdown-hint">
             <small>
-              **gras** | *italique* | [lien](url) | `code` | Ctrl+Enter pour envoyer
+              **gras** · *italique* · [lien](url) · `code` · Ctrl+Enter pour envoyer
             </small>
           </div>
         )}

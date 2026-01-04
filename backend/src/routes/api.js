@@ -232,5 +232,106 @@ router.get('/stats', (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 });
+// Ajouter ces routes dans backend/routes/api.js
+// (après les routes POST existantes pour avatar/banner)
+
+const fs = require('fs').promises;
+const path = require('path');
+
+// DELETE avatar
+router.delete('/users/:username/avatar', async (req, res) => {
+  try {
+    const { username } = req.params;
+    
+    // Récupérer le user pour obtenir l'URL de l'avatar
+    const user = userService.getUserByUsername(username);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+    
+    // Si pas d'avatar custom, rien à faire
+    if (!user.avatar_url) {
+      return res.json({ 
+        success: true, 
+        message: 'Aucun avatar à supprimer',
+        user 
+      });
+    }
+    
+    // Supprimer le fichier physique
+    const filename = path.basename(user.avatar_url);
+    const filepath = path.join(__dirname, '..', 'uploads', filename);
+    
+    try {
+      await fs.unlink(filepath);
+      console.log(`✅ Avatar supprimé : ${filepath}`);
+    } catch (err) {
+      console.warn(`⚠️ Fichier avatar introuvable : ${filepath}`);
+      // On continue quand même pour nettoyer la DB
+    }
+    
+    // Mettre à jour la DB (avatar_url = null)
+    const updatedUser = userService.updateUser(username, { avatar_url: null });
+    
+    res.json({
+      success: true,
+      message: 'Avatar supprimé avec succès',
+      user: updatedUser
+    });
+    
+  } catch (error) {
+    console.error('Erreur DELETE avatar:', error);
+    res.status(500).json({ error: 'Erreur lors de la suppression de l\'avatar' });
+  }
+});
+
+// DELETE banner
+router.delete('/users/:username/banner', async (req, res) => {
+  try {
+    const { username } = req.params;
+    
+    // Récupérer le user pour obtenir l'URL du banner
+    const user = userService.getUserByUsername(username);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+    
+    // Si pas de banner custom, rien à faire
+    if (!user.banner_url) {
+      return res.json({ 
+        success: true, 
+        message: 'Aucun banner à supprimer',
+        user 
+      });
+    }
+    
+    // Supprimer le fichier physique
+    const filename = path.basename(user.banner_url);
+    const filepath = path.join(__dirname, '..', 'uploads', filename);
+    
+    try {
+      await fs.unlink(filepath);
+      console.log(`✅ Banner supprimé : ${filepath}`);
+    } catch (err) {
+      console.warn(`⚠️ Fichier banner introuvable : ${filepath}`);
+      // On continue quand même pour nettoyer la DB
+    }
+    
+    // Mettre à jour la DB (banner_url = null)
+    const updatedUser = userService.updateUser(username, { banner_url: null });
+    
+    res.json({
+      success: true,
+      message: 'Banner supprimé avec succès',
+      user: updatedUser
+    });
+    
+  } catch (error) {
+    console.error('Erreur DELETE banner:', error);
+    res.status(500).json({ error: 'Erreur lors de la suppression du banner' });
+  }
+});
 
 module.exports = router;

@@ -50,3 +50,15 @@
 .header-avatar-img {
   border: 2px solid rgba(255, 255, 255, 0.2);
 }
+.avatar-medium {
+  width: 64px;
+  height: 64px;
+  border-radius: $border-radius-full;
+  object-fit: cover;
+}
+.avatar-large {
+  width: 96px;
+  height: 96px;
+  border-radius: $border-radius-full;
+  object-fit: cover;
+}
