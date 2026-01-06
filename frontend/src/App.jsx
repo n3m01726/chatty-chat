@@ -1,14 +1,12 @@
 // App.jsx
 import React, { useState, useEffect } from 'react';
-import { JoinScreen } from './components/JoinScreen';
+import { LoginScreen } from './components/LoginScreen';
 import { ChatContainer } from './components/ChatContainer';
 import { UserProfile } from './components/UserProfile';
 import { useSocket } from './hooks/useSocket';
 import { useDarkMode } from './hooks/useDarkMode';
 import { SOCKET_URL } from './utils/constants';
-import { BottomBar } from './components/BottomBar';
-import { TopBar } from './components/TopBar';
-import './styles/index.scss';
+import './styles/index.css';
 
 console.log('🎯 App.jsx chargé');
 
@@ -20,7 +18,7 @@ function App() {
   console.log('🎯 App component render');
   
   const [username, setUsername] = useState('');
-  const [isJoined, setIsJoined] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
   const [profileUser, setProfileUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   
@@ -39,10 +37,10 @@ function App() {
 
   // Charger le profil de l'utilisateur au démarrage
   useEffect(() => {
-    if (isJoined && username) {
+    if (isLogged && username) {
       loadUserProfile(username);
     }
-  }, [isJoined, username]);
+  }, [isLogged, username]);
 
   const loadUserProfile = async (user) => {
     try {
@@ -63,10 +61,10 @@ function App() {
   };
 
   // Rejoindre le chat
-  const handleJoin = (newUsername) => {
+  const handleLogin = (newUsername) => {
     setUsername(newUsername);
     joinChat(newUsername);
-    setIsJoined(true);
+    setIsLogged(true);
     
     // Mettre le pseudo dans le titre de l'onglet
     document.title = `💬 ${newUsername} - Chat`;
@@ -95,11 +93,11 @@ function App() {
   };
 
   // Afficher l'écran de connexion si pas encore connecté
-  if (!isJoined) {
+  if (!isLogged) {
     return (
       <div className="app">
-        <JoinScreen 
-          onJoin={handleJoin}
+        <LoginScreen 
+          onLogin={handleLogin}
           darkMode={darkMode}
           onToggleDarkMode={toggleDarkMode}
         />
@@ -111,17 +109,7 @@ function App() {
   return (
     
   
-    <div classN ame="app">
-      <TopBar 
-        channelName="Général"
-        username={username}
-        userProfile={userProfile}
-        darkMode={darkMode}
-        onToggleDarkMode={toggleDarkMode}
-        onAvatarClick={() => handleUsernameClick(username)}
-        onSettingsClick={() => setProfileUser(username)} 
-        />
-
+    <div className="app">
       <ChatContainer 
         username={username}
         userCount={userCount}
@@ -147,17 +135,8 @@ function App() {
           onProfileUpdate={handleProfileUpdate}
         />
       )}
+    </div>
     
-       <BottomBar
-        channelName="Général"
-        username={username}
-        userProfile={userProfile}
-        darkMode={darkMode}
-        onToggleDarkMode={toggleDarkMode}
-        onAvatarClick={() => handleUsernameClick(username)}
-        onSettingsClick={() => setProfileUser(username)} 
-        />
- </div>   
   );
 }
 

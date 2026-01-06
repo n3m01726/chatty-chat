@@ -18,7 +18,7 @@ export const formatTime = (timestamp, timezone = null) => {
     options.timeZone = timezone;
   }
   
-  return new Date(timestamp).toLocaleTimeString('fr-CA', options);
+  return new Date(timestamp).toLocaleTimeString('fr-FR', options);
 };
 
 /**

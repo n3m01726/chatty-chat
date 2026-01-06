@@ -1,0 +1,54 @@
+/* Formulaire d'envoi */
+.message-input-form {
+    display: flex;
+    padding: 20px;
+    gap: 10px;
+    background: white;
+    border-top: 1px solid #e0e0e0;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  
+  body.dark-mode .message-input-form {
+    background: #2d2d44;
+    border-top-color: #3a3a52;
+  }
+  
+  .message-input-form input {
+    flex: 1;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 15px;
+    transition: border-color 0.3s, background 0.3s, color 0.3s;
+  }
+  
+  body.dark-mode .message-input-form input {
+    background: #3a3a52;
+    border-color: #4a4a62;
+    color: #e0e0e0;
+  }
+  
+  body.dark-mode .message-input-form input::placeholder {
+    color: #999;
+  }
+  
+  .message-input-form input:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+  
+  .message-input-form button {
+    padding: 15px 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .message-input-form button:hover {
+    transform: scale(1.05);
+  }

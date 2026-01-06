@@ -1,0 +1,67 @@
+/* Interface de chat */
+.chat-container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 800px;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: background 0.3s ease;
+  }
+  
+  body.dark-mode .chat-container {
+    background: #2d2d44;
+  }
+  
+  .chat-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s ease;
+  }
+  
+  body.dark-mode .chat-header {
+    background: linear-gradient(135deg, #4a4a62 0%, #3a3a52 100%);
+  }
+  
+  .chat-header h2 {
+    font-size: 24px;
+  }
+  
+  .user-info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  .current-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+  
+  .current-user:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .username-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .user-count {
+    font-size: 14px;
+  }

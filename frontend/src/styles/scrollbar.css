@@ -1,0 +1,29 @@
+/* Scrollbar personnalisée */
+.messages-container::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .messages-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  body.dark-mode .messages-container::-webkit-scrollbar-track {
+    background: #2d2d44;
+  }
+  
+  .messages-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+  
+  body.dark-mode .messages-container::-webkit-scrollbar-thumb {
+    background: #4a4a62;
+  }
+  
+  .messages-container::-webkit-scrollbar-thumb:hover {
+    background: #999;
+  }
+  
+  body.dark-mode .messages-container::-webkit-scrollbar-thumb:hover {
+    background: #5a5a72;
+  }
