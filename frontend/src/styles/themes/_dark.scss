@@ -1,7 +1,0 @@
-@use '../base/variables' as *;
-
-body.dark-mode {
-  background: $dark-bg-gradient;
-  transition: background $transition-normal;
-  color:$color-text-dark;
-}

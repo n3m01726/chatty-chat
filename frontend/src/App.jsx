@@ -1,163 +1,162 @@
-// App.jsx
-import React, { useState, useEffect } from 'react';
-import { JoinScreen } from './components/JoinScreen';
-import { ChatContainer } from './components/ChatContainer';
-import { UserProfile } from './components/UserProfile';
-import { useSocket } from './hooks/useSocket';
-import { useDarkMode } from './hooks/useDarkMode';
-import { SOCKET_URL } from './utils/constants';
-import { BottomBar } from './components/BottomBar';
-import { TopBar } from './components/TopBar';
-import './styles/index.scss';
+import { useState, useEffect, useRef } from 'react';
+import { io } from 'socket.io-client';
 
-console.log('🎯 App.jsx chargé');
+// Connexion au serveur Socket.io
+const socket = io('http://localhost:3000', {
+  autoConnect: true,
+  reconnection: true,
+  reconnectionDelay: 1000,
+  reconnectionAttempts: 5
+});
 
-/**
- * Composant principal de l'application
- * Gère l'état de connexion et orchestre les composants
- */
 function App() {
-  console.log('🎯 App component render');
-  
+  const [messages, setMessages] = useState([]);
+  const [messageInput, setMessageInput] = useState('');
   const [username, setUsername] = useState('');
-  const [isJoined, setIsJoined] = useState(false);
-  const [profileUser, setProfileUser] = useState(null);
-  const [userProfile, setUserProfile] = useState(null);
-  
-  // Hooks custom
-  const { darkMode, toggleDarkMode, setDarkModeValue } = useDarkMode();
-  const {
-    messages,
-    userCount,
-    typingUsers,
-    joinChat,
-    sendMessage,
-    emitTyping,
-    emitStopTyping,
-    deleteMessage
-  } = useSocket();
+  const [isUsernameSet, setIsUsernameSet] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+  const messagesEndRef = useRef(null);
 
-  // Charger le profil de l'utilisateur au démarrage
+  // Auto-scroll vers le bas quand de nouveaux messages arrivent
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   useEffect(() => {
-    if (isJoined && username) {
-      loadUserProfile(username);
-    }
-  }, [isJoined, username]);
+    scrollToBottom();
+  }, [messages]);
 
-  const loadUserProfile = async (user) => {
-    try {
-      const apiUrl = SOCKET_URL.replace(/:\d+$/, ':3001');
-      const response = await fetch(`${apiUrl}/api/users/${user}`);
-      const data = await response.json();
-      
-      if (data.success) {
-        setUserProfile(data.profile);
-        // Appliquer le dark mode du profil
-        if (data.profile.dark_mode !== undefined) {
-          setDarkModeValue(data.profile.dark_mode === 1);
-        }
-      }
-    } catch (error) {
-      console.error('Erreur lors du chargement du profil:', error);
+  useEffect(() => {
+    // Gestion de la connexion
+    socket.on('connect', () => {
+      console.log('✅ Connecté au serveur');
+      setIsConnected(true);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('❌ Déconnecté du serveur');
+      setIsConnected(false);
+    });
+
+    // Réception de l'historique des messages
+    socket.on('message:history', (history) => {
+      setMessages(history);
+    });
+
+    // Réception d'un nouveau message
+    socket.on('message:new', (message) => {
+      setMessages(prev => [...prev, message]);
+    });
+
+    // Nettoyage à la déconnexion du composant
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.off('message:history');
+      socket.off('message:new');
+    };
+  }, []);
+
+  const handleSetUsername = (e) => {
+    e.preventDefault();
+    if (username.trim()) {
+      // Enregistrer l'utilisateur sur le serveur
+      socket.emit('user:register', { username });
+      setIsUsernameSet(true);
     }
   };
 
-  // Rejoindre le chat
-  const handleJoin = (newUsername) => {
-    setUsername(newUsername);
-    joinChat(newUsername);
-    setIsJoined(true);
+  const handleSendMessage = (e) => {
+    e.preventDefault();
     
-    // Mettre le pseudo dans le titre de l'onglet
-    document.title = `💬 ${newUsername} - Chat`;
-  };
-
-  // Ouvrir le profil d'un utilisateur
-  const handleUsernameClick = (clickedUsername) => {
-    setProfileUser(clickedUsername);
-  };
-
-  // Fermer le profil
-  const handleCloseProfile = () => {
-    setProfileUser(null);
-  };
-
-  // Callback quand le profil est mis à jour
-  const handleProfileUpdate = (updatedProfile) => {
-    if (updatedProfile.username === username) {
-      setUserProfile(updatedProfile);
+    if (messageInput.trim() && isUsernameSet) {
+      // Envoi du message au serveur
+      socket.emit('message:send', {
+        content: messageInput,
+        username: username
+      });
       
-      // Mettre à jour le dark mode
-      if (updatedProfile.dark_mode !== undefined) {
-        setDarkModeValue(updatedProfile.dark_mode === 1);
-      }
+      // Reset du champ
+      setMessageInput('');
     }
   };
 
-  // Afficher l'écran de connexion si pas encore connecté
-  if (!isJoined) {
+  const formatTime = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString('fr-FR', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+  };
+
+  // Écran de choix du pseudo
+  if (!isUsernameSet) {
     return (
-      <div className="app">
-        <JoinScreen 
-          onJoin={handleJoin}
-          darkMode={darkMode}
-          onToggleDarkMode={toggleDarkMode}
-        />
+      <div className="app app--login">
+        <div className="login">
+          <h1 className="login__title">Bienvenue sur ChattyChat</h1>
+          <form onSubmit={handleSetUsername} className="login__form">
+            <input
+              type="text"
+              placeholder="Entre ton pseudo..."
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="login__input"
+              autoFocus
+            />
+            <button type="submit" className="login__button">
+              Rejoindre le chat
+            </button>
+          </form>
+        </div>
       </div>
     );
   }
 
-  // Afficher le chat
+  // Interface de chat principale
   return (
-    
-  
-    <div classN ame="app">
-      <TopBar 
-        channelName="Général"
-        username={username}
-        userProfile={userProfile}
-        darkMode={darkMode}
-        onToggleDarkMode={toggleDarkMode}
-        onAvatarClick={() => handleUsernameClick(username)}
-        onSettingsClick={() => setProfileUser(username)} 
-        />
+    <div className="app">
+      <div className="chat">
+        <div className="chat__header">
+          <h2 className="chat__title"># général</h2>
+          <div className="chat__status">
+            <span className={`chat__indicator ${isConnected ? 'chat__indicator--online' : 'chat__indicator--offline'}`}></span>
+            {isConnected ? 'Connecté' : 'Déconnecté'}
+          </div>
+        </div>
 
-      <ChatContainer 
-        username={username}
-        userCount={userCount}
-        messages={messages}
-        typingUsers={typingUsers}
-        darkMode={darkMode}
-        onToggleDarkMode={toggleDarkMode}
-        onSendMessage={sendMessage}
-        onTyping={emitTyping}
-        onStopTyping={emitStopTyping}
-        onUsernameClick={handleUsernameClick}
-        userProfile={userProfile}
-        onDeleteMessage={deleteMessage}
-      />
-      
-      {profileUser && (
-        <UserProfile
-          username={profileUser}
-          isOwn={profileUser === username}
-          onClose={handleCloseProfile}
-          darkMode={darkMode}
-          onToggleDarkMode={toggleDarkMode}
-          onProfileUpdate={handleProfileUpdate}
-        />
-      )}
-    
-       <BottomBar
-        channelName="Général"
-        username={username}
-        userProfile={userProfile}
-        darkMode={darkMode}
-        onToggleDarkMode={toggleDarkMode}
-        onAvatarClick={() => handleUsernameClick(username)}
-        onSettingsClick={() => setProfileUser(username)} 
-        />
- </div>   
+        <div className="chat__messages">
+          {messages.map((msg) => (
+            <div key={msg.id} className="message">
+              <img 
+                src={msg.avatar} 
+                alt={msg.username}
+                className="message__avatar"
+              />
+              <div className="message__content">
+                <div className="message__header">
+                  <span className="message__username">{msg.username}</span>
+                  <span className="message__timestamp">{formatTime(msg.timestamp)}</span>
+                </div>
+                <div className="message__text">{msg.content}</div>
+              </div>
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+
+        <form onSubmit={handleSendMessage} className="chat__input-wrapper">
+          <input
+            type="text"
+            placeholder="Envoie un message dans #général"
+            value={messageInput}
+            onChange={(e) => setMessageInput(e.target.value)}
+            className="chat__input"
+            disabled={!isConnected}
+          />
+        </form>
+      </div>
+    </div>
   );
 }
 
