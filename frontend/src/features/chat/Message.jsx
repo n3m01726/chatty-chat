@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
-import { formatTime, stringToColor } from '../utils/formatters';
-import { Avatar } from './Avatar';
-import { SOCKET_URL } from '../utils/constants';
+import { formatTime, stringToColor } from '../../utils/formatters';
+import { Avatar } from '../../components/Avatar';
+import { SOCKET_URL } from '../../utils/constants';
 
 /**
  * Composant pour afficher un message (normal ou système)

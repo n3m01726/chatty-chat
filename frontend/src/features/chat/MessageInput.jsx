@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { GifPicker } from './GifPicker';
 import { AttachmentUploader } from './AttachmentUploader';
-import { TYPING_TIMEOUT, MAX_MESSAGE_LENGTH } from '../utils/constants';
+import { TYPING_TIMEOUT, MAX_MESSAGE_LENGTH } from '../../utils/constants';
 import {Code,Image,ImagePlay } from "lucide-react"
 
 /**

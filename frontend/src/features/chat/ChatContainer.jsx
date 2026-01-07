@@ -9,6 +9,7 @@ import { MessageInput } from './MessageInput';
  * Container principal du chat (composition des composants)
  */
 export const ChatContainer = ({
+  channelname,
   username,
   userCount,
   messages,
@@ -25,6 +26,8 @@ export const ChatContainer = ({
   return (
     <div className="chat-container">
       <ChatHeader 
+        channel_name='#general'
+        channel_description='Discussion générale'
         username={username}
         userCount={userCount}
         darkMode={darkMode}

@@ -1,6 +1,6 @@
 // components/AttachmentUploader.jsx
 import React, { useState } from 'react';
-import { SOCKET_URL } from '../utils/constants';
+import { SOCKET_URL } from '../../utils/constants';
 import { Image,Folder } from "lucide-react";
 /**
  * Composant pour uploader des images/vidéos avec timer d'expiration

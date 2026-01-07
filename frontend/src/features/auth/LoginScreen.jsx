@@ -1,6 +1,6 @@
 // components/JoinScreen.jsx
 import React, { useState } from 'react';
-import { MAX_USERNAME_LENGTH } from '../utils/constants';
+import { MAX_USERNAME_LENGTH } from '../../utils/constants';
 
 /**
  * Écran de connexion au chat

@@ -1,6 +1,6 @@
 // components/TypingIndicator.jsx
 import React from 'react';
-import { formatTypingUsers } from '../utils/formatters';
+import { formatTypingUsers } from '../../utils/formatters';
 
 /**
  * Indicateur "X est en train d'écrire..."

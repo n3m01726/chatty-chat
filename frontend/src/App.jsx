@@ -1,8 +1,8 @@
 // App.jsx
 import React, { useState, useEffect } from 'react';
-import { LoginScreen } from './components/LoginScreen';
-import { ChatContainer } from './components/ChatContainer';
-import { UserProfile } from './components/UserProfile';
+import { LoginScreen } from './features/auth/LoginScreen';
+import { ChatContainer } from './features/chat/ChatContainer';
+import { UserProfile } from './features/profile/UserProfile';
 import { useSocket } from './hooks/useSocket';
 import { useDarkMode } from './hooks/useDarkMode';
 import { SOCKET_URL } from './utils/constants';

@@ -1,6 +1,6 @@
 // components/UserProfile.jsx
 import React, { useState, useEffect } from 'react';
-import { Avatar } from './Avatar';
+import { Avatar } from '../../components/Avatar';
 import { Pen } from 'lucide-react';
 
 import { 
@@ -10,7 +10,7 @@ import {
   MAX_BIO_LENGTH,
   MAX_STATUS_LENGTH,
   MAX_DISPLAY_NAME_LENGTH
-} from '../utils/constants';
+} from '../../utils/constants';
 
 /**
  * Modal de profil utilisateur étendu
@@ -284,6 +284,35 @@ export const UserProfile = ({
         {/* Sections éditables */}
         {editing ? (
           <div className="profile-edit-form">
+            <div className="status-group form-group">
+            {/* Status */}
+            <div className="status-select">
+              <label>Statut</label>
+              <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                {USER_STATUSES.map(s => (
+                  <option key={s.value} value={s.value}>
+                    {s.icon} {s.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Status Text */}
+            
+            <div className="form-group">
+              <label>Message de statut</label>
+              <input
+                type="text"
+                value={statusText}
+                onChange={(e) => setStatusText(e.target.value)}
+                placeholder="Que fais-tu en ce moment ?"
+                maxLength={MAX_STATUS_LENGTH}
+              />
+              <small>{statusText.length}/{MAX_STATUS_LENGTH}</small>
+            </div>
+</div>
+
+
             {/* Display Name */}
             <div className="form-group">
               <label>Nom d'affichage</label>
@@ -322,30 +351,7 @@ export const UserProfile = ({
               <small>{bio.length}/{MAX_BIO_LENGTH}</small>
             </div>
 
-            {/* Status */}
-            <div className="form-group">
-              <label>Statut</label>
-              <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                {USER_STATUSES.map(s => (
-                  <option key={s.value} value={s.value}>
-                    {s.icon} {s.label}
-                  </option>
-                ))}
-              </select>
-            </div>
 
-            {/* Status Text */}
-            <div className="form-group">
-              <label>Message de statut</label>
-              <input
-                type="text"
-                value={statusText}
-                onChange={(e) => setStatusText(e.target.value)}
-                placeholder="Que fais-tu en ce moment ?"
-                maxLength={MAX_STATUS_LENGTH}
-              />
-              <small>{statusText.length}/{MAX_STATUS_LENGTH}</small>
-            </div>
 
             {/* Custom Color */}
             <div className="form-group">

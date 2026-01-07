@@ -1,6 +1,6 @@
 // components/GifPicker.jsx
 import React, { useState, useEffect } from 'react';
-import { SOCKET_URL } from '../utils/constants';
+import { SOCKET_URL } from '../../utils/constants';
 
 /**
  * Sélecteur de GIF via Giphy

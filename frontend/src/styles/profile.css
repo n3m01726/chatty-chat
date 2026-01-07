@@ -375,7 +375,7 @@
   .profile-actions {
     display: flex;
     gap: 10px;
-    justify-content: flex-end;
+    justify-content: flex-start;
     margin: 20px 0;
     padding: 15px 0;
     border-top: 1px solid #e0e0e0;
@@ -413,12 +413,25 @@
     gap: 20px;
   }
   
-  .form-group {
-    display: flex;
+  .form-group{
+   display: flex;
     flex-direction: column;
     gap: 8px;
   }
   
+  .status-group{
+     background: #f0f0f5;
+     padding: 10px;
+     border-radius: 10px;
+        }
+        body.dark-mode .status-group{ background: #212121;}
+  .status-select {
+    padding-bottom: 15px;
+    font-size: 14px;
+    width: 100%;
+  }
+
+
   .form-group label {
     font-weight: 600;
     font-size: 13px;
@@ -440,6 +453,7 @@
     font-family: inherit;
     font-size: 14px;
     transition: border-color 0.3s;
+    width: 100%;
   }
   
   body.dark-mode .form-group input,
@@ -460,7 +474,7 @@
   .form-group small {
     font-size: 12px;
     color: #999;
-    text-align: right;
+    text-align: left;
   }
   
   .form-group-row {
