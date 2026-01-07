@@ -1,0 +1,14 @@
+// Import global styles
+@import './utils/variables';
+@import './utils/globals';
+
+// Import feature styles
+@import './features/login';
+@import './features/chat';
+
+// Import component styles
+@import './components/message';
+@import './components/message-input';
+@import './components/gif-picker';
+@import './components/typing-indicator';
+@import './components/user-profile';

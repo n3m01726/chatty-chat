@@ -1,1 +1,19 @@
+# Dependencies
 node_modules/
+
+# SQLite database
+database/chat.db
+database/chat.db-shm
+database/chat.db-wal
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db

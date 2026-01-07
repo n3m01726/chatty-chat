@@ -1,0 +1,104 @@
+@import '../utils/variables';
+
+.login-wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, $bg-darkest 0%, $bg-darker 100%);
+}
+
+.login {
+  background: $bg-dark;
+  padding: $spacing-xl;
+  border-radius: $radius-lg;
+  text-align: center;
+  min-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.login__logo {
+  font-size: 64px;
+  margin-bottom: $spacing-md;
+}
+
+.login__title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: $spacing-sm;
+  color: $text-normal;
+}
+
+.login__subtitle {
+  font-size: 14px;
+  color: $text-muted;
+  margin-bottom: $spacing-lg;
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.login__input {
+  padding: $spacing-md;
+  background: $bg-darkest;
+  border: 1px solid transparent;
+  border-radius: $radius-sm;
+  color: $text-normal;
+  font-size: 16px;
+  transition: border $transition-normal;
+  
+  &:focus {
+    outline: none;
+    border-color: $accent-blue;
+  }
+  
+  &::placeholder {
+    color: $text-muted;
+  }
+}
+
+.login__button {
+  padding: $spacing-md $spacing-lg;
+  background: $accent-blue;
+  color: white;
+  border: none;
+  border-radius: $radius-sm;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all $transition-normal;
+  
+  &:hover:not(:disabled) {
+    background: $accent-blue-hover;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba($accent-blue, 0.3);
+  }
+  
+  &:disabled {
+    background: $bg-lighter;
+    color: $text-muted;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.login__hint {
+  font-size: 12px;
+  color: $text-muted;
+}
