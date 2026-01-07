@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import { GifPicker } from './GifPicker';
 import { AttachmentUploader } from './AttachmentUploader';
 import { TYPING_TIMEOUT, MAX_MESSAGE_LENGTH } from '../utils/constants';
+import {Code,Image,ImagePlay } from "lucide-react"
 
 /**
  * Formulaire d'envoi de message avec options enrichies
@@ -124,33 +125,32 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
         <div className="input-toolbar">
           <button
             type="button"
-            className={`toolbar-btn ${useMarkdown ? 'active' : ''}`}
+            className={`button-upload ${useMarkdown ? 'active' : ''}`}
             onClick={() => setUseMarkdown(!useMarkdown)}
             title="Markdown (gras, italique, liens...)"
           >
-            {useMarkdown ? '📝' : 'Md'}
+            {useMarkdown ? '📝' : <Code size={20}/>}
           </button>
           <button
             type="button"
-            className="toolbar-btn"
+            className="button-upload"
             onClick={() => setShowGifPicker(true)}
             title="Ajouter un GIF"
           >
-            🎬
+          <ImagePlay size={20} />
           </button>
           <button
             type="button"
-            className="toolbar-btn"
+            className="button-upload"
             onClick={() => setShowAttachmentUploader(true)}
             title="Ajouter une image/vidéo"
           >
-            📎
+            <Image size={20} />
           </button>
         </div>
-
-        
           <textarea
-          id="message-input"
+            id="message-input"
+            className="input"
             placeholder={useMarkdown ? "Message (Markdown activé)..." : "Écris ton message..."}
             value={inputMessage}
             onChange={handleChange}
@@ -164,17 +164,9 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
               overflow: 'auto'
             }}
           />
-          <button type="submit" disabled={!inputMessage.trim() && !attachment && !gifUrl}>
+          <button className="button-send" type="submit" disabled={!inputMessage.trim() && !attachment && !gifUrl}>
             Envoyer
           </button>
-
-        {useMarkdown && (
-          <div className="markdown-hint">
-            <small>
-              **gras** | *italique* | [lien](url) | `code` | Ctrl+Enter pour envoyer
-            </small>
-          </div>
-        )}
       </form>
 
       {/* Modals */}

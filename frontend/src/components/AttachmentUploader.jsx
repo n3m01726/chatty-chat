@@ -1,7 +1,7 @@
 // components/AttachmentUploader.jsx
 import React, { useState } from 'react';
 import { SOCKET_URL } from '../utils/constants';
-
+import { Image,Folder } from "lucide-react";
 /**
  * Composant pour uploader des images/vidéos avec timer d'expiration
  */
@@ -83,7 +83,7 @@ export const AttachmentUploader = ({ onAttachmentReady, onClose }) => {
     <div className="attachment-uploader-overlay" onClick={onClose}>
       <div className="attachment-uploader-modal" onClick={(e) => e.stopPropagation()}>
         <div className="attachment-header">
-          <h3>📎 Ajouter une image/vidéo</h3>
+          <h3> <Image size={20} /> Ajouter une image/vidéo</h3>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>
 
@@ -97,12 +97,13 @@ export const AttachmentUploader = ({ onAttachmentReady, onClose }) => {
                 style={{ display: 'none' }}
               />
               <div className="drop-zone-content">
-                <span className="drop-zone-icon">📁</span>
+                <span className="drop-zone-icon">
+                <Folder color="#ffcc00" size={64}/></span>
                 <p>Cliquer pour sélectionner</p>
                 <small>Images et vidéos (max 10MB)</small>
               </div>
             </label>
-          ) : (
+          ) : ( 
             <div className="file-preview">
               {file.type.startsWith('image/') ? (
                 <img src={preview} alt="Preview" />
