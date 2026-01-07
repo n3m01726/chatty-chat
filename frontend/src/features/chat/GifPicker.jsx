@@ -9,7 +9,7 @@ export const GifPicker = ({ onSelect, onClose }) => {
   const [gifs, setGifs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [mode, setMode] = useState('trending'); // 'trending' ou 'search'
+  const [mode, setMode] = useState('trending');
 
   const apiUrl = SOCKET_URL.replace(/:\d+$/, ':3001');
 
@@ -58,11 +58,11 @@ export const GifPicker = ({ onSelect, onClose }) => {
   };
 
   return (
-    <div className="gif-picker-overlay" onClick={onClose}>
-      <div className="gif-picker-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="gif-picker-header">
+    <div className="gif-picker__overlay" onClick={onClose}>
+      <div className="gif-picker__modal" onClick={(e) => e.stopPropagation()}>
+        <div className="gif-picker__header">
           <h3>🎬 Choisir un GIF</h3>
-          <button className="modal-close" onClick={onClose}>✕</button>
+          <button className="modal__close" onClick={onClose}>✕</button>
         </div>
 
         <form className="gif-search-form" onSubmit={handleSearch}>
@@ -95,7 +95,7 @@ export const GifPicker = ({ onSelect, onClose }) => {
           )}
         </div>
 
-        <div className="gif-picker-footer">
+        <div className="gif-picker__footer">
           <small>Powered by Giphy</small>
         </div>
       </div>

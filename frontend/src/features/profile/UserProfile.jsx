@@ -1,7 +1,7 @@
 // components/UserProfile.jsx
 import React, { useState, useEffect } from 'react';
 import { Avatar } from '../../components/Avatar';
-import { Pen } from 'lucide-react';
+import { Pen, Camera, Hourglass, CircleDollarSign, Webcam, Heart } from 'lucide-react';
 
 import { 
   SOCKET_URL, 
@@ -187,13 +187,13 @@ export const UserProfile = ({
   const bannerUrl = profile.banner_url ? `${apiUrl}${profile.banner_url}` : null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content user-profile-modal" onClick={e => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>✕</button>
+    <div className="modal__overlay" onClick={onClose}>
+      <div className="modal__content user-profile-modal" onClick={e => e.stopPropagation()}>
+        <button className="modal__close" onClick={onClose}>✕</button>
         
         {/* Banner */}
         <div 
-          className="profile-banner"
+          className="profile__banner"
           style={{ 
             backgroundImage: bannerUrl ? `url(${bannerUrl})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
           }}
@@ -213,15 +213,15 @@ export const UserProfile = ({
 
         {/* Header avec avatar */}
         <div className="profile-header-with-avatar">
-          <div className="profile-avatar-container">
+          <div className="profile__avatar-container">
             {avatarUrl ? (
-              <img src={avatarUrl} alt={displayUsername} className="profile-avatar-img" />
+              <img src={avatarUrl} alt={displayUsername} className="profile__avatar-img" />
             ) : (
               <Avatar username={username} size="large" />
             )}
             {isOwn && editing && (
               <label className="upload-avatar-btn">
-                {uploadingAvatar ? '⏳' : '📷'}
+                {uploadingAvatar ? <Hourglass size={16}/> : <Camera size={16} />}
                 <input 
                   type="file" 
                   accept="image/*" 
@@ -232,36 +232,55 @@ export const UserProfile = ({
             )}
           </div>
           
-          <div className="profile-info">
-            <div className="profile-name-row">
+          <div className="profile__info">
+            <div className="profile__name-row">
               <h2>{displayUsername}</h2>
               {profile.pronouns && <span className="pronouns">({profile.pronouns})</span>}
             </div>
-            <p className="profile-username">@{username}</p>
-            <div className="profile-status">
-              <span className="status-indicator" style={{ color: currentStatus.color }}>
+            <p className="profile__username">@{username}</p>
+            <div className="profile__status">
+              <span className="status__indicator" style={{ color: currentStatus.color }}>
                 {currentStatus.icon}
               </span>
-              <span className="status-label">{currentStatus.label}</span>
-              {profile.status_text && <span className="status-text"> - {profile.status_text}</span>}
+              <span className="status__label">{currentStatus.label}</span>
+              {profile.status_text && <span className="status__text"> - {profile.status_text}</span>}
             </div>
+            
           </div>
         </div>
-
         {/* Actions */}
+        {!isOwn && (
+          <div className="profile__actions">
+          
+              <button onClick={() => setEditing(true)} className="btn btn--primary icon-text">
+                <CircleDollarSign size={16}/>  Tips
+              </button>
+              <button onClick={() => setEditing(true)} className="btn btn--primary icon-text">
+                <Webcam size={16}/>  Watch Free streams
+              </button>
+              <button onClick={() => setEditing(true)} className="btn btn--primary icon-text">
+                <Heart size={16}/>
+              </button>
+          </div>
+        )}
+
+
+
+
+        {/* Actions Own account*/}
         {isOwn && (
-          <div className="profile-actions">
+          <div className="profile__actions">
             {!editing ? (
-              <button onClick={() => setEditing(true)} className="btn-primary icon-text">
+              <button onClick={() => setEditing(true)} className="btn btn--primary icon-text">
                 <Pen size={16}/>  Modifier le profil 
               </button>
             ) : (
               <>
 
-                <button onClick={handleSave} className="btn-primary" disabled={saving}>
+                <button onClick={handleSave} className="btn btn--primary" disabled={saving}>
                   {saving ? 'Sauvegarde...' : 'Enregistrer'}
                 </button>
-                <button onClick={() => setEditing(false)} className="btn-secondary">
+                <button onClick={() => setEditing(false)} className="btn btn--secondary">
                   Annuler
                 </button>
               </>
@@ -270,20 +289,20 @@ export const UserProfile = ({
         )}
 
         {/* Statistiques */}
-        <div className="profile-stats">
+        <div className="profile__stats">
           <div className="stat">
-            <span className="stat-value">{profile.messageCount || 0}</span>
-            <span className="stat-label">Messages</span>
+            <span className="stat__value">{profile.messageCount || 0}</span>
+            <span className="stat__label">Messages</span>
           </div>
           <div className="stat">
-            <span className="stat-value">{formatDate(profile.created_at)}</span>
-            <span className="stat-label">Membre depuis</span>
+            <span className="stat__value">{formatDate(profile.created_at)}</span>
+            <span className="stat__label">Membre depuis</span>
           </div>
         </div>
 
         {/* Sections éditables */}
         {editing ? (
-          <div className="profile-edit-form">
+          <div className="profile__edit-form">
             <div className="status-group form-group">
             {/* Status */}
             <div className="status-select">

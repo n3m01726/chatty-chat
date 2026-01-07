@@ -1,0 +1,196 @@
+// ============================================
+// CHAT FEATURE - ChattyChat
+// ============================================
+
+// Typing indicator
+.typing-indicator {
+    padding: $spacing-md $spacing-xl;
+    font-size: $font-size-sm;
+    color: $light-text-muted;
+    font-style: italic;
+    background: $light-bg-messages;
+    border-top: $border-width solid $light-border;
+    @include smooth-transition(all);
+    
+    body.dark-mode & {
+      background: $dark-bg-messages;
+      color: $dark-text-secondary;
+      border-top-color: $dark-border;
+    }
+  }
+  
+  // Message input
+  .message-input-form {
+    display: flex;
+    padding: $spacing-xl;
+    gap: $spacing-md;
+    background: $light-bg-container;
+    border-top: $border-width solid $light-border;
+    @include smooth-transition(all);
+    
+    body.dark-mode & {
+      background: $dark-bg-container;
+      border-top-color: $dark-border;
+    }
+    
+    textarea, input {
+      flex: 1;
+      padding: $spacing-lg;
+      border: $border-width-thick solid $light-border;
+      border-radius: $border-radius-3xl;
+      font-size: $font-size-md;
+      @include smooth-transition(all);
+      width: 300px;
+      
+      &:focus {
+        outline: none;
+        border-color: $color-primary;
+      }
+      
+      body.dark-mode & {
+        background: $dark-bg-input;
+        border-color: $dark-border;
+        color: $dark-text-primary;
+        
+        &::placeholder {
+          color: $dark-text-muted;
+        }
+      }
+    }
+    
+    .button-send {
+      padding: $spacing-lg $spacing-2xl;
+      @include gradient-primary;
+      color: $color-white;
+      border: none;
+      border-radius: $border-radius-3xl;
+      font-size: $font-size-md;
+      font-weight: $font-weight-semibold;
+      cursor: pointer;
+      @include hover-scale;
+    }
+    
+    .button-upload {
+      margin-right: $spacing-md;
+      padding: $spacing-lg;
+      color: $color-gray-600;
+      border: none;
+      border-radius: $border-radius-md;
+      font-size: $font-size-md;
+      font-weight: $font-weight-semibold;
+      cursor: pointer;
+      @include hover-scale;
+      
+      body.dark-mode & {
+        color: $dark-text-primary;
+        background: $dark-border-secondary;
+      }
+    }
+  }
+  
+  // Input toolbar
+  .input-toolbar {
+    display: flex;
+    gap: $spacing-xs;
+    padding: $spacing-sm $spacing-xl 0;
+    background: $light-bg-container;
+    border-top: $border-width solid $light-border;
+    
+    body.dark-mode & {
+      background: $dark-bg-container;
+      border-top-color: $dark-border;
+    }
+  }
+  
+  .toolbar-btn {
+    background: transparent;
+    border: $border-width solid $light-border;
+    border-radius: $border-radius-sm;
+    padding: $spacing-sm $spacing-md;
+    cursor: pointer;
+    font-size: $font-size-base;
+    @include smooth-transition(all);
+    
+    &:hover {
+      background: opacity($color-black, 0.05);
+    }
+    
+    &.active {
+      background: $color-primary;
+      color: $color-white;
+      border-color: $color-primary;
+    }
+    
+    body.dark-mode & {
+      border-color: $dark-border-secondary;
+      
+      &:hover {
+        background: opacity($color-white, 0.05);
+      }
+    }
+  }
+  
+  // Message preview
+  .message-preview {
+    display: flex;
+    gap: $spacing-md;
+    padding: $spacing-md $spacing-xl;
+    background: opacity($color-black, 0.02);
+    border-bottom: $border-width solid $light-border;
+    
+    body.dark-mode & {
+      background: opacity($color-white, 0.02);
+      border-bottom-color: $dark-border;
+    }
+  }
+  
+  .preview-item {
+    position: relative;
+    background: $light-bg-container;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $border-radius-md;
+    @include flex-column;
+    gap: $spacing-xs;
+    box-shadow: $shadow-sm;
+    
+    body.dark-mode & {
+      background: $dark-bg-secondary;
+    }
+    
+    small {
+      font-size: $font-size-xs;
+      color: $light-text-secondary;
+      
+      body.dark-mode & {
+        color: $dark-text-secondary;
+      }
+    }
+  }
+  
+  .preview-gif {
+    padding: $spacing-xs;
+    
+    img {
+      max-width: 100px;
+      border-radius: $border-radius-sm;
+    }
+  }
+  
+  .preview-remove {
+    position: absolute;
+    top: $spacing-xs;
+    right: $spacing-xs;
+    background: opacity($color-black, 0.6);
+    color: $color-white;
+    border: none;
+    border-radius: $border-radius-full;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: $font-size-sm;
+    @include flex-center;
+    
+    &:hover {
+      background: opacity($color-black, 0.8);
+    }
+  }

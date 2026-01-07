@@ -1,7 +1,8 @@
 // components/AttachmentUploader.jsx
 import React, { useState } from 'react';
 import { SOCKET_URL } from '../../utils/constants';
-import { Image,Folder } from "lucide-react";
+import { Image, Folder } from "lucide-react";
+
 /**
  * Composant pour uploader des images/vidéos avec timer d'expiration
  */
@@ -9,7 +10,7 @@ export const AttachmentUploader = ({ onAttachmentReady, onClose }) => {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const [expiresIn, setExpiresIn] = useState(null); // null = pas d'expiration
+  const [expiresIn, setExpiresIn] = useState(null);
 
   const apiUrl = SOCKET_URL.replace(/:\d+$/, ':3001');
 
@@ -17,13 +18,11 @@ export const AttachmentUploader = ({ onAttachmentReady, onClose }) => {
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
 
-    // Vérifier le type
     if (!selectedFile.type.startsWith('image/') && !selectedFile.type.startsWith('video/')) {
       alert('Seuls les images et vidéos sont acceptés');
       return;
     }
 
-    // Vérifier la taille (max 10MB)
     if (selectedFile.size > 10 * 1024 * 1024) {
       alert('Fichier trop volumineux (max 10MB)');
       return;
@@ -31,7 +30,6 @@ export const AttachmentUploader = ({ onAttachmentReady, onClose }) => {
 
     setFile(selectedFile);
 
-    // Créer un preview
     const reader = new FileReader();
     reader.onload = (e) => {
       setPreview(e.target.result);
@@ -80,14 +78,14 @@ export const AttachmentUploader = ({ onAttachmentReady, onClose }) => {
   ];
 
   return (
-    <div className="attachment-uploader-overlay" onClick={onClose}>
-      <div className="attachment-uploader-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="attachment-header">
-          <h3> <Image size={20} /> Ajouter une image/vidéo</h3>
-          <button className="modal-close" onClick={onClose}>✕</button>
+    <div className="attachment-uploader__overlay" onClick={onClose}>
+      <div className="attachment-uploader__modal" onClick={(e) => e.stopPropagation()}>
+        <div className="attachment__header">
+          <h3><Image size={20} /> Ajouter une image/vidéo</h3>
+          <button className="modal__close" onClick={onClose}>✕</button>
         </div>
 
-        <div className="attachment-body">
+        <div className="attachment__body">
           {!file ? (
             <label className="file-drop-zone">
               <input
@@ -96,9 +94,10 @@ export const AttachmentUploader = ({ onAttachmentReady, onClose }) => {
                 onChange={handleFileSelect}
                 style={{ display: 'none' }}
               />
-              <div className="drop-zone-content">
-                <span className="drop-zone-icon">
-                <Folder color="#ffcc00" size={64}/></span>
+              <div className="drop-zone__content">
+                <span className="drop-zone__icon">
+                  <Folder color="#ffcc00" size={64}/>
+                </span>
                 <p>Cliquer pour sélectionner</p>
                 <small>Images et vidéos (max 10MB)</small>
               </div>
@@ -134,13 +133,13 @@ export const AttachmentUploader = ({ onAttachmentReady, onClose }) => {
                 )}
               </div>
 
-              <div className="attachment-actions">
-                <button onClick={onClose} className="btn-secondary">
+              <div className="attachment__actions">
+                <button onClick={onClose} className="btn btn--secondary">
                   Annuler
                 </button>
                 <button
                   onClick={handleUpload}
-                  className="btn-primary"
+                  className="btn btn--primary"
                   disabled={uploading}
                 >
                   {uploading ? '⏳ Upload...' : '✓ Envoyer'}

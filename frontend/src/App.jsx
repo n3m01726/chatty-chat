@@ -6,7 +6,7 @@ import { UserProfile } from './features/profile/UserProfile';
 import { useSocket } from './hooks/useSocket';
 import { useDarkMode } from './hooks/useDarkMode';
 import { SOCKET_URL } from './utils/constants';
-import './styles/index.css';
+import './styles/index.scss'; // ← SCSS au lieu de CSS
 
 console.log('🎯 App.jsx chargé');
 
@@ -107,8 +107,6 @@ function App() {
 
   // Afficher le chat
   return (
-    
-  
     <div className="app">
       <ChatContainer 
         username={username}
@@ -136,7 +134,6 @@ function App() {
         />
       )}
     </div>
-    
   );
 }
 

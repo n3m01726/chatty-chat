@@ -1,0 +1,20 @@
+// ============================================
+// BASE - ChattyChat
+// ============================================
+
+body {
+    background: $light-bg-body;
+    height: 100vh;
+    overflow: hidden;
+    @include smooth-transition(background);
+    
+    &.dark-mode {
+      background: $dark-bg-body;
+    }
+  }
+  
+  .app {
+    @include flex-center;
+    height: 100vh;
+    padding: $spacing-xl;
+  }

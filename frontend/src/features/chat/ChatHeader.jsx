@@ -28,7 +28,7 @@ export const ChatHeader = ({ channel_name, channel_description, username, userCo
             <img 
               src={avatarUrl} 
               alt={displayName} 
-              className="avatar avatar-small"
+              className="avatar avatar--small"
             />
           ) : (
             <Avatar username={username} size="small" />
