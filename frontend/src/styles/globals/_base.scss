@@ -3,18 +3,26 @@
 // ============================================
 
 body {
-    background: $light-bg-body;
-    height: 100vh;
-    overflow: hidden;
-    @include smooth-transition(background);
-    
-    &.dark-mode {
-      background: $dark-bg-body;
-    }
+  background: $light-bg-body;
+  height: 100vh;
+  overflow: hidden;
+  @include smooth-transition(background);
+  
+  &.dark-mode {
+    background: $dark-bg-body;
+  }
+}
+
+.app {
+  height: 100vh;
+  @include flex-column;
+  
+  &--logged {
+    padding: 0;
   }
   
-  .app {
+  &--login {
     @include flex-center;
-    height: 100vh;
     padding: $spacing-xl;
   }
+}

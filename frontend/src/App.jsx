@@ -3,10 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { LoginScreen } from './features/auth/LoginScreen';
 import { ChatContainer } from './features/chat/ChatContainer';
 import { UserProfile } from './features/profile/UserProfile';
+import { AppHeader } from './components/AppHeader';
+import { AppFooter } from './components/AppFooter';
 import { useSocket } from './hooks/useSocket';
 import { useDarkMode } from './hooks/useDarkMode';
 import { SOCKET_URL } from './utils/constants';
-import './styles/index.scss'; // ← SCSS au lieu de CSS
+import './styles/index.scss';
 
 console.log('🎯 App.jsx chargé');
 
@@ -92,10 +94,20 @@ function App() {
     }
   };
 
+  // Handler pour le bouton membres (TODO: implémenter sidebar)
+  const handleMembersClick = () => {
+    console.log('TODO: Ouvrir la sidebar des membres');
+  };
+
+  // Handler pour le bouton settings (TODO: implémenter page settings)
+  const handleSettingsClick = () => {
+    console.log('TODO: Ouvrir les paramètres');
+  };
+
   // Afficher l'écran de connexion si pas encore connecté
   if (!isLogged) {
     return (
-      <div className="app">
+      <div className="app app--login">
         <LoginScreen 
           onLogin={handleLogin}
           darkMode={darkMode}
@@ -105,9 +117,16 @@ function App() {
     );
   }
 
-  // Afficher le chat
+  // Afficher le chat avec nouvelle structure
   return (
-    <div className="app">
+    <div className="app app--logged">
+      <AppHeader 
+        channelName="#general"
+        channelDescription="Discussion générale"
+        userCount={userCount}
+        onMembersClick={handleMembersClick}
+      />
+      
       <ChatContainer 
         username={username}
         userCount={userCount}
@@ -121,6 +140,15 @@ function App() {
         onUsernameClick={handleUsernameClick}
         userProfile={userProfile}
         onDeleteMessage={deleteMessage}
+      />
+      
+      <AppFooter 
+        username={username}
+        userProfile={userProfile}
+        darkMode={darkMode}
+        onProfileClick={() => handleUsernameClick(username)}
+        onSettingsClick={handleSettingsClick}
+        onToggleDarkMode={toggleDarkMode}
       />
       
       {profileUser && (

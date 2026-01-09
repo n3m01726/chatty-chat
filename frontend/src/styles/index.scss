@@ -15,6 +15,7 @@
 @import 'globals/reset';
 @import 'globals/typography';
 @import 'globals/base';
+@import 'globals/animations';
 
 // ============================================
 // THEMES
@@ -27,6 +28,7 @@
 // ============================================
 @import 'layout/container';
 @import 'layout/header';
+@import 'layout/footer';
 
 // ============================================
 // COMPONENTS
@@ -44,3 +46,4 @@
 @import 'features/profile';
 @import 'features/gif-picker';
 @import 'features/file-uploader';
+

@@ -1,7 +1,7 @@
 // components/UserProfile.jsx
 import React, { useState, useEffect } from 'react';
 import { Avatar } from '../../components/Avatar';
-import { Pen, Camera, Hourglass, CircleDollarSign, Webcam, Heart } from 'lucide-react';
+import { Pen, Trash2 } from 'lucide-react';
 
 import { 
   SOCKET_URL, 
@@ -91,7 +91,6 @@ export const UserProfile = ({
         setProfile(data.profile);
         setEditing(false);
         
-        // Notifier le parent pour mettre à jour l'affichage
         if (onProfileUpdate) {
           onProfileUpdate(data.profile);
         }
@@ -159,10 +158,54 @@ export const UserProfile = ({
     }
   };
 
+  const handleDeleteAvatar = async () => {
+    if (!confirm('Supprimer votre avatar ?')) return;
+    
+    try {
+      const response = await fetch(`${apiUrl}/api/users/${username}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ avatar_url: null })
+      });
+      
+      const data = await response.json();
+      if (data.success) {
+        setProfile(data.profile);
+        if (onProfileUpdate) {
+          onProfileUpdate(data.profile);
+        }
+      }
+    } catch (error) {
+      console.error('Erreur lors de la suppression de l\'avatar:', error);
+    }
+  };
+
+  const handleDeleteBanner = async () => {
+    if (!confirm('Supprimer votre bannière ?')) return;
+    
+    try {
+      const response = await fetch(`${apiUrl}/api/users/${username}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ banner_url: null })
+      });
+      
+      const data = await response.json();
+      if (data.success) {
+        setProfile(data.profile);
+        if (onProfileUpdate) {
+          onProfileUpdate(data.profile);
+        }
+      }
+    } catch (error) {
+      console.error('Erreur lors de la suppression de la bannière:', error);
+    }
+  };
+
   if (loading) {
     return (
-      <div className="modal-overlay" onClick={onClose}>
-        <div className="modal-content" onClick={e => e.stopPropagation()}>
+      <div className="modal__overlay" onClick={onClose}>
+        <div className="modal__content" onClick={e => e.stopPropagation()}>
           <p>Chargement...</p>
         </div>
       </div>
@@ -199,20 +242,31 @@ export const UserProfile = ({
           }}
         >
           {isOwn && editing && (
-            <label className="upload-banner-btn">
-              {uploadingBanner ? '⏳' : ''} Upload your cover
-              <input 
-                type="file" 
-                accept="image/*" 
-                onChange={handleBannerUpload}
-                style={{ display: 'none' }}
-              />
-            </label>
+            <>
+              <label className="upload-banner-btn">
+                {uploadingBanner ? '⏳' : '📷'} Upload cover
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleBannerUpload}
+                  style={{ display: 'none' }}
+                />
+              </label>
+              {bannerUrl && (
+                <button 
+                  className="delete-banner-btn"
+                  onClick={handleDeleteBanner}
+                  title="Supprimer la bannière"
+                >
+                  <Trash2 size={16} /> Supprimer
+                </button>
+              )}
+            </>
           )}
         </div>
 
         {/* Header avec avatar */}
-        <div className="profile-header-with-avatar">
+        <div className="profile__header-with-avatar">
           <div className="profile__avatar-container">
             {avatarUrl ? (
               <img src={avatarUrl} alt={displayUsername} className="profile__avatar-img" />
@@ -220,15 +274,26 @@ export const UserProfile = ({
               <Avatar username={username} size="large" />
             )}
             {isOwn && editing && (
-              <label className="upload-avatar-btn">
-                {uploadingAvatar ? <Hourglass size={16}/> : <Camera size={16} />}
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handleAvatarUpload}
-                  style={{ display: 'none' }}
-                />
-              </label>
+              <>
+                <label className="upload-avatar-btn" title="Changer l'avatar">
+                  {uploadingAvatar ? '⏳' : '📷'}
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={handleAvatarUpload}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+                {avatarUrl && (
+                  <button 
+                    className="delete-avatar-btn"
+                    onClick={handleDeleteAvatar}
+                    title="Supprimer l'avatar"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                )}
+              </>
             )}
           </div>
           
@@ -239,44 +304,24 @@ export const UserProfile = ({
             </div>
             <p className="profile__username">@{username}</p>
             <div className="profile__status">
-              <span className="status__indicator" style={{ color: currentStatus.color }}>
+              <span className="status-indicator" style={{ color: currentStatus.color }}>
                 {currentStatus.icon}
               </span>
-              <span className="status__label">{currentStatus.label}</span>
-              {profile.status_text && <span className="status__text"> - {profile.status_text}</span>}
+              <span className="status-label">{currentStatus.label}</span>
+              {profile.status_text && <span className="status-text"> - {profile.status_text}</span>}
             </div>
-            
           </div>
         </div>
+
         {/* Actions */}
-        {!isOwn && (
-          <div className="profile__actions">
-          
-              <button onClick={() => setEditing(true)} className="btn btn--primary icon-text">
-                <CircleDollarSign size={16}/>  Tips
-              </button>
-              <button onClick={() => setEditing(true)} className="btn btn--primary icon-text">
-                <Webcam size={16}/>  Watch Free streams
-              </button>
-              <button onClick={() => setEditing(true)} className="btn btn--primary icon-text">
-                <Heart size={16}/>
-              </button>
-          </div>
-        )}
-
-
-
-
-        {/* Actions Own account*/}
         {isOwn && (
           <div className="profile__actions">
             {!editing ? (
               <button onClick={() => setEditing(true)} className="btn btn--primary icon-text">
-                <Pen size={16}/>  Modifier le profil 
+                <Pen size={16}/> Modifier le profil 
               </button>
             ) : (
               <>
-
                 <button onClick={handleSave} className="btn btn--primary" disabled={saving}>
                   {saving ? 'Sauvegarde...' : 'Enregistrer'}
                 </button>
@@ -304,35 +349,30 @@ export const UserProfile = ({
         {editing ? (
           <div className="profile__edit-form">
             <div className="status-group form-group">
-            {/* Status */}
-            <div className="status-select">
-              <label>Statut</label>
-              <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                {USER_STATUSES.map(s => (
-                  <option key={s.value} value={s.value}>
-                    {s.icon} {s.label}
-                  </option>
-                ))}
-              </select>
+              <div className="status-select">
+                <label>Statut</label>
+                <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                  {USER_STATUSES.map(s => (
+                    <option key={s.value} value={s.value}>
+                      {s.icon} {s.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Message de statut</label>
+                <input
+                  type="text"
+                  value={statusText}
+                  onChange={(e) => setStatusText(e.target.value)}
+                  placeholder="Que fais-tu en ce moment ?"
+                  maxLength={MAX_STATUS_LENGTH}
+                />
+                <small>{statusText.length}/{MAX_STATUS_LENGTH}</small>
+              </div>
             </div>
 
-            {/* Status Text */}
-            
-            <div className="form-group">
-              <label>Message de statut</label>
-              <input
-                type="text"
-                value={statusText}
-                onChange={(e) => setStatusText(e.target.value)}
-                placeholder="Que fais-tu en ce moment ?"
-                maxLength={MAX_STATUS_LENGTH}
-              />
-              <small>{statusText.length}/{MAX_STATUS_LENGTH}</small>
-            </div>
-</div>
-
-
-            {/* Display Name */}
             <div className="form-group">
               <label>Nom d'affichage</label>
               <input
@@ -345,7 +385,6 @@ export const UserProfile = ({
               <small>{displayName.length}/{MAX_DISPLAY_NAME_LENGTH}</small>
             </div>
 
-            {/* Pronouns */}
             <div className="form-group">
               <label>Pronoms</label>
               <input
@@ -357,7 +396,6 @@ export const UserProfile = ({
               />
             </div>
 
-            {/* Bio */}
             <div className="form-group">
               <label>Bio</label>
               <textarea
@@ -370,9 +408,6 @@ export const UserProfile = ({
               <small>{bio.length}/{MAX_BIO_LENGTH}</small>
             </div>
 
-
-
-            {/* Custom Color */}
             <div className="form-group">
               <label>Couleur personnalisée</label>
               <div className="color-picker-row">
@@ -391,7 +426,7 @@ export const UserProfile = ({
                 {customColor && (
                   <button 
                     onClick={() => setCustomColor('')}
-                    className="btn-clear"
+                    className="btn btn--clear"
                     title="Réinitialiser"
                   >
                     ↺
@@ -400,7 +435,6 @@ export const UserProfile = ({
               </div>
             </div>
 
-            {/* Timezone */}
             <div className="form-group">
               <label>Fuseau horaire</label>
               <select value={timezone} onChange={(e) => setTimezone(e.target.value)}>
@@ -411,15 +445,11 @@ export const UserProfile = ({
                 ))}
               </select>
             </div>
-
-            {/* Dark Mode */}
-            <div className="form-group form-group-row">
-            </div>
           </div>
         ) : (
-          <div className="profile-view">
+          <div className="profile__view">
             {bio && (
-              <div className="profile-section">
+              <div className="profile__section">
                 <h3>bio</h3>
                 <p>{bio}</p>
               </div>
