@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { GifPicker } from './GifPicker';
 import { AttachmentUploader } from './AttachmentUploader';
 import { TYPING_TIMEOUT, MAX_MESSAGE_LENGTH } from '../../utils/constants';
-import {Code,Image,ImagePlay } from "lucide-react"
+import {Code,Image,ImagePlay,Send} from "lucide-react"
 
 /**
  * Formulaire d'envoi de message avec options enrichies
@@ -88,7 +88,7 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
 
   return (
     <>
-      <form className="message-input-form" onSubmit={handleSubmit}>
+      <form className="input-toolbar" onSubmit={handleSubmit}>
         {/* Preview des attachments/gifs */}
         {(attachment || gifUrl) && (
           <div className="message-preview">
@@ -125,7 +125,7 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
         <div className="input-toolbar">
           <button
             type="button"
-            className={`button-upload ${useMarkdown ? 'active' : ''}`}
+            className={`toolbar-btn ${useMarkdown ? 'active' : ''}`}
             onClick={() => setUseMarkdown(!useMarkdown)}
             title="Markdown (gras, italique, liens...)"
           >
@@ -133,7 +133,7 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
           </button>
           <button
             type="button"
-            className="button-upload"
+            className="toolbar-btn"
             onClick={() => setShowGifPicker(true)}
             title="Ajouter un GIF"
           >
@@ -141,7 +141,7 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
           </button>
           <button
             type="button"
-            className="button-upload"
+            className="toolbar-btn"
             onClick={() => setShowAttachmentUploader(true)}
             title="Ajouter une image/vidéo"
           >
@@ -150,7 +150,7 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
         </div>
           <textarea
             id="message-input"
-            className="input"
+            className="input-toolbar__textarea"
             placeholder={useMarkdown ? "Message (Markdown activé)..." : "Écris ton message..."}
             value={inputMessage}
             onChange={handleChange}
@@ -164,8 +164,11 @@ export const MessageInput = ({ onSendMessage, onTyping, onStopTyping }) => {
               overflow: 'auto'
             }}
           />
-          <button className="button-send" type="submit" disabled={!inputMessage.trim() && !attachment && !gifUrl}>
-            Envoyer
+          <button 
+          className="toolbar-btn" 
+          type="submit" 
+          disabled={!inputMessage.trim() && !attachment && !gifUrl}>
+            <Send size={20} />
           </button>
       </form>
 

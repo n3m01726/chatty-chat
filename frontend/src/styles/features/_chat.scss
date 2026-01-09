@@ -25,26 +25,36 @@
     padding: $spacing-xl;
     gap: $spacing-md;
     background: $light-bg-container;
-    border-top: $border-width solid $light-border;
     @include smooth-transition(all);
     
     body.dark-mode & {
       background: $dark-bg-container;
-      border-top-color: $dark-border;
     }
+  }
+  
+  // Input toolbar
+  .input-toolbar {
+    display: flex;
+    gap: $spacing-xs;
+    padding: $spacing-sm $spacing-xl;
+    background: $light-bg-container;
     
-    textarea, input {
+    body.dark-mode & {
+      background: $dark-bg-container;
+    }
+    &__textarea, &__input {
       flex: 1;
       padding: $spacing-lg;
-      border: $border-width-thick solid $light-border;
-      border-radius: $border-radius-3xl;
+      
+      border: none;
       font-size: $font-size-md;
       @include smooth-transition(all);
       width: 300px;
       
       &:focus {
         outline: none;
-        border-color: $color-primary;
+        background: $color-gray-100;
+        border-radius: $border-radius-sm;
       }
       
       body.dark-mode & {
@@ -56,49 +66,6 @@
           color: $dark-text-muted;
         }
       }
-    }
-    
-    .button-send {
-      padding: $spacing-lg $spacing-2xl;
-      @include gradient-primary;
-      color: $color-white;
-      border: none;
-      border-radius: $border-radius-3xl;
-      font-size: $font-size-md;
-      font-weight: $font-weight-semibold;
-      cursor: pointer;
-      @include hover-scale;
-    }
-    
-    .button-upload {
-      margin-right: $spacing-md;
-      padding: $spacing-lg;
-      color: $color-gray-600;
-      border: none;
-      border-radius: $border-radius-md;
-      font-size: $font-size-md;
-      font-weight: $font-weight-semibold;
-      cursor: pointer;
-      @include hover-scale;
-      
-      body.dark-mode & {
-        color: $dark-text-primary;
-        background: $dark-border-secondary;
-      }
-    }
-  }
-  
-  // Input toolbar
-  .input-toolbar {
-    display: flex;
-    gap: $spacing-xs;
-    padding: $spacing-sm $spacing-xl 0;
-    background: $light-bg-container;
-    border-top: $border-width solid $light-border;
-    
-    body.dark-mode & {
-      background: $dark-bg-container;
-      border-top-color: $dark-border;
     }
   }
   

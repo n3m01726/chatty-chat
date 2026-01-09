@@ -278,8 +278,8 @@
   }
   
   .upload-avatar-btn {
-    bottom: $spacing-xs;
-    right: $spacing-xl;
+    bottom: 48px;  // Collé au bord inférieur de l'avatar
+    left: 58px;   // Collé au bord droit de l'avatar
     width: 32px;
     height: 32px;
     border-radius: $border-radius-full;
