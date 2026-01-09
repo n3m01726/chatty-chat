@@ -52,6 +52,36 @@ router.put('/users/:username', (req, res) => {
   }
 });
 
+// Dans le handler PUT /api/users/:username, modifier pour gérer la suppression:
+
+router.put('/users/:username', (req, res) => {
+  try {
+    const { username } = req.params;
+    const profileData = req.body;
+    
+    // Si avatar_url ou banner_url est explicitement null, supprimer le fichier
+    if (profileData.avatar_url === null) {
+      const currentProfile = userService.getUserProfile(username);
+      if (currentProfile?.avatar_url) {
+        uploadService.deleteFile(currentProfile.avatar_url);
+      }
+    }
+    
+    if (profileData.banner_url === null) {
+      const currentProfile = userService.getUserProfile(username);
+      if (currentProfile?.banner_url) {
+        uploadService.deleteFile(currentProfile.banner_url);
+      }
+    }
+    
+    const profile = userService.updateUserProfile(username, profileData);
+    res.json({ success: true, profile });
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour du profil:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // POST /api/users/:username/avatar - Upload avatar
 router.post('/users/:username/avatar', uploadService.single('avatar'), (req, res) => {
   try {
