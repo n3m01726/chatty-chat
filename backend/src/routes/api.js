@@ -8,6 +8,7 @@ const router = express.Router();
  */
 
 // Import des sous-routers
+const authRoutes = require('./auth.routes');
 const usersRoutes = require('./users.routes');
 const messagesRoutes = require('./messages.routes');
 const giphyRoutes = require('./giphy.routes');
@@ -15,6 +16,7 @@ const membersRoutes = require('./members.routes');
 const statsRoutes = require('./stats.routes');
 
 // Montage des routes
+router.use('/auth', authRoutes);
 router.use('/users', usersRoutes);
 router.use('/messages', messagesRoutes);
 router.use('/giphy', giphyRoutes);

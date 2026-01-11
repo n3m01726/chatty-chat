@@ -1,6 +1,8 @@
 // App.jsx
 import React, { useState, useEffect } from 'react';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LoginScreen } from './features/auth/LoginScreen';
+import { RegisterScreen } from './features/auth/RegisterScreen';
 import { ChatContainer } from './features/chat/ChatContainer';
 import { UserProfile } from './features/profile/UserProfile';
 import { AppHeader } from './components/AppHeader';
@@ -12,24 +14,19 @@ import { useDarkMode } from './hooks/useDarkMode';
 import { SOCKET_URL } from './utils/constants';
 import './styles/index.scss';
 
-console.log('🎯 App.jsx chargé');
-
 /**
- * Composant principal de l'application
- * Gère l'état de connexion et orchestre les composants
+ * Composant principal de l'application avec authentification
  */
-function App() {
-  console.log('🎯 App component render');
-  
-  const [username, setUsername] = useState('');
-  const [isLogged, setIsLogged] = useState(false);
+function AppContent() {
+  const { user, loading: authLoading, logout } = useAuth();
+  const [authView, setAuthView] = useState('login'); // 'login' ou 'register'
   const [profileUser, setProfileUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const [members, setMembers] = useState([]);
   
   // Sidebars state
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false);
-  const [rightSidebarOpen, setRightSidebarOpen] = useState(true); // Open by default
+  const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
   
   // Hooks custom
   const { darkMode, toggleDarkMode, setDarkModeValue } = useDarkMode();
@@ -44,29 +41,33 @@ function App() {
     deleteMessage
   } = useSocket();
 
-  // Charger le profil de l'utilisateur au démarrage
+  // Rejoindre le chat quand l'utilisateur est authentifié
   useEffect(() => {
-    if (isLogged && username) {
-      loadUserProfile(username);
+    if (user) {
+      joinChat(user.username);
+      loadUserProfile(user.username);
       loadMembers();
+      document.title = `💬 ${user.username} - Chat`;
     }
-  }, [isLogged, username]);
+  }, [user]);
 
   // Recharger les membres régulièrement
   useEffect(() => {
-    if (!isLogged) return;
+    if (!user) return;
     
     const interval = setInterval(() => {
       loadMembers();
-    }, 10000); // Toutes les 10 secondes
+    }, 10000);
     
     return () => clearInterval(interval);
-  }, [isLogged]);
+  }, [user]);
 
-  const loadUserProfile = async (user) => {
+  const loadUserProfile = async (username) => {
     try {
       const apiUrl = SOCKET_URL.replace(/:\d+$/, ':3001');
-      const response = await fetch(`${apiUrl}/api/users/${user}`);
+      const response = await fetch(`${apiUrl}/api/users/${username}`, {
+        credentials: 'include'
+      });
       const data = await response.json();
       
       if (data.success) {
@@ -83,7 +84,9 @@ function App() {
   const loadMembers = async () => {
     try {
       const apiUrl = SOCKET_URL.replace(/:\d+$/, ':3001');
-      const response = await fetch(`${apiUrl}/api/members`);
+      const response = await fetch(`${apiUrl}/api/members`, {
+        credentials: 'include'
+      });
       const data = await response.json();
       
       if (data.success) {
@@ -92,14 +95,6 @@ function App() {
     } catch (error) {
       console.error('Erreur lors du chargement des membres:', error);
     }
-  };
-
-  const handleLogin = (newUsername) => {
-    setUsername(newUsername);
-    joinChat(newUsername);
-    setIsLogged(true);
-    const [version] = 'alpha'; // Version de l'application
-    document.title = `${newUsername} chattyChat ${version}`;
   };
 
   const handleUsernameClick = (clickedUsername) => {
@@ -111,14 +106,13 @@ function App() {
   };
 
   const handleProfileUpdate = (updatedProfile) => {
-    if (updatedProfile.username === username) {
+    if (updatedProfile.username === user?.username) {
       setUserProfile(updatedProfile);
       
       if (updatedProfile.dark_mode !== undefined) {
         setDarkModeValue(updatedProfile.dark_mode === 1);
       }
     }
-    // Recharger la liste des membres pour mettre à jour l'affichage
     loadMembers();
   };
 
@@ -131,24 +125,42 @@ function App() {
     console.log('TODO: Ouvrir les paramètres');
   };
 
-  if (!isLogged) {
+  const handleLogout = async () => {
+    await logout();
+    setAuthView('login');
+  };
+
+  // Loading state
+  if (authLoading) {
     return (
       <div className="app app--login">
-        <div style={{ marginBottom: '50px' }}>
-        <LoginScreen 
-          onLogin={handleLogin}
-          darkMode={darkMode}
-          onToggleDarkMode={toggleDarkMode}
-        />
-      </div>
-      
-      <p style={{ color:"#fff" }}>chattyChat is currently in [BETA]</p>
-      <p style={{ color:"#fff" }}>If your device has been wrongly detected, see other downloads.</p>
-      <p style={{ color:"#fff" }}>Please report any issues you encounter on GitHub.</p>
+        <div className="login-screen">
+          <h1>💬 Chargement...</h1>
+        </div>
       </div>
     );
   }
 
+  // Not authenticated - show login/register
+  if (!user) {
+    return (
+      <div className="app app--login">
+        {authView === 'login' ? (
+          <LoginScreen 
+            onSwitchToRegister={() => setAuthView('register')}
+            onSuccess={() => {}} // User is set automatically via AuthContext
+          />
+        ) : (
+          <RegisterScreen 
+            onSwitchToLogin={() => setAuthView('login')}
+            onSuccess={() => setAuthView('login')} // After registration, go to login
+          />
+        )}
+      </div>
+    );
+  }
+
+  // Authenticated - show chat
   return (
     <div className="app app--logged">
       <AppHeader 
@@ -170,7 +182,7 @@ function App() {
         />
         
         <ChatContainer 
-          username={username}
+          username={user.username}
           userCount={userCount}
           messages={messages}
           typingUsers={typingUsers}
@@ -194,18 +206,19 @@ function App() {
       </div>
       
       <AppFooter 
-        username={username}
+        username={user.username}
         userProfile={userProfile}
         darkMode={darkMode}
-        onProfileClick={() => handleUsernameClick(username)}
+        onProfileClick={() => handleUsernameClick(user.username)}
         onSettingsClick={handleSettingsClick}
         onToggleDarkMode={toggleDarkMode}
+        onLogout={handleLogout}
       />
       
       {profileUser && (
         <UserProfile
           username={profileUser}
-          isOwn={profileUser === username}
+          isOwn={profileUser === user.username}
           onClose={handleCloseProfile}
           darkMode={darkMode}
           onToggleDarkMode={toggleDarkMode}
@@ -213,6 +226,17 @@ function App() {
         />
       )}
     </div>
+  );
+}
+
+/**
+ * App wrapper avec AuthProvider
+ */
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 

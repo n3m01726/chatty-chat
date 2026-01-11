@@ -3,6 +3,7 @@ const express = require('express');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
+const cookieParser = require('cookie-parser'); // ← NOUVEAU
 const cron = require('node-cron');
 
 const config = require('./config/config');
@@ -23,13 +24,18 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: config.CORS_ORIGIN,
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST"],
+    credentials: true // ← IMPORTANT pour les cookies
   }
 });
 
 // Middleware Express
-app.use(cors());
+app.use(cors({
+  origin: config.CORS_ORIGIN,
+  credentials: true // ← IMPORTANT pour les cookies
+}));
 app.use(express.json());
+app.use(cookieParser()); // ← NOUVEAU
 
 // Servir les fichiers uploadés statiquement
 app.use('/uploads', express.static('uploads'));
@@ -61,6 +67,7 @@ httpServer.listen(config.PORT, () => {
   console.log(`📡 Socket.io prêt (CORS: ${config.CORS_ORIGIN})`);
   console.log(`🔧 Environnement: ${config.NODE_ENV}`);
   console.log(`📦 Base de données: SQLite (data/chat.db)`);
+  console.log(`🔐 Authentification: JWT activée`);
 });
 
 // Tâche cron : nettoyer les attachments expirés toutes les heures

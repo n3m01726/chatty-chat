@@ -1,6 +1,6 @@
 // components/AppFooter.jsx
 import React from 'react';
-import { Settings, Moon, Sun } from 'lucide-react';
+import { Settings, Moon, Sun, LogOut } from 'lucide-react';
 import { Avatar } from './Avatar';
 import { SOCKET_URL } from '../utils/constants';
 
@@ -13,7 +13,8 @@ export const AppFooter = ({
   darkMode, 
   onProfileClick, 
   onSettingsClick,
-  onToggleDarkMode 
+  onToggleDarkMode,
+  onLogout
 }) => {
   const apiUrl = SOCKET_URL.replace(/:\d+$/, ':3001');
   const avatarUrl = userProfile?.avatar_url ? `${apiUrl}${userProfile.avatar_url}` : null;
@@ -54,6 +55,14 @@ export const AppFooter = ({
             title={darkMode ? 'Mode clair' : 'Mode sombre'}
           >
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+          
+          <button
+            className="app-footer__btn app-footer__btn--logout"
+            onClick={onLogout}
+            title="Déconnexion"
+          >
+            <LogOut size={20} />
           </button>
         </div>
       </div>
