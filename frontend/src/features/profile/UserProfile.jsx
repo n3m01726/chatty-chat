@@ -249,19 +249,21 @@ export const UserProfile = ({
           </div>
         </div>
         {/* Actions */}
-        {!isOwn && (
+        {!isOwn && (<>
+          <div className="channels__todo"> 📝 TODO </div>
+          
           <div className="profile__actions">
           
-              <button onClick={() => setEditing(true)} className="btn btn--primary icon-text">
+              <button className="btn btn--primary icon-text">
                 <CircleDollarSign size={16}/>  Tips
               </button>
-              <button onClick={() => setEditing(true)} className="btn btn--primary icon-text">
+              <button className="btn btn--primary icon-text">
                 <Webcam size={16}/>  Watch Free streams
               </button>
-              <button onClick={() => setEditing(true)} className="btn btn--primary icon-text">
+              <button className="btn btn--primary icon-text">
                 <Heart size={16}/>
               </button>
-          </div>
+          </div> </>
         )}
 
 

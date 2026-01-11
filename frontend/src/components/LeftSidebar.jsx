@@ -67,14 +67,7 @@ export const LeftSidebar = ({
           </div>
 
           {/* TODO Message */}
-          <div style={{ 
-            padding: '20px', 
-            margin: '20px', 
-            background: 'rgba(102, 126, 234, 0.1)', 
-            borderRadius: '8px',
-            fontSize: '13px',
-            color: '#667eea'
-          }}>
+          <div className="channels__todo">
             <strong>📝 TODO:</strong> Multi-channel system à venir dans une prochaine phase !
           </div>
         </div>

@@ -1,6 +1,6 @@
 // components/RightSidebar.jsx
 import React, { useState, useMemo } from 'react';
-import { X, Search } from 'lucide-react';
+import { X, Search, Pin } from 'lucide-react';
 import { MemberItem } from './MemberItem';
 import { useResizable } from '../hooks/useResizable';
 
@@ -12,7 +12,8 @@ export const RightSidebar = ({
   isOpen, 
   onClose, 
   onProfileClick,
-  onMentionClick 
+  onMentionClick,
+  pinSidebar 
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const { width, isDragging, handlers } = useResizable('rightSidebarWidth', 280, 200, 400);
@@ -70,14 +71,21 @@ export const RightSidebar = ({
         <div className="sidebar__header">
           <h3>Membres — {totalMembers}</h3>
           <button 
+            className="sidebar__pin"
+            onClick={pinSidebar}
+            title="Épingler la sidebar"
+          >
+            <Pin size={20} />
+          </button>
+        
+        <button 
             className="sidebar__close"
             onClick={onClose}
             title="Fermer"
           >
-            <X size={18} />
+            <X size={20} />
           </button>
-        </div>
-
+          </div>
         {/* Search */}
         <div className="sidebar__search">
           <input

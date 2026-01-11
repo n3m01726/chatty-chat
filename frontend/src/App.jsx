@@ -98,7 +98,8 @@ function App() {
     setUsername(newUsername);
     joinChat(newUsername);
     setIsLogged(true);
-    document.title = `💬 ${newUsername} - Chat`;
+    const [version] = 'alpha'; // Version de l'application
+    document.title = `${newUsername} chattyChat ${version}`;
   };
 
   const handleUsernameClick = (clickedUsername) => {
@@ -133,11 +134,17 @@ function App() {
   if (!isLogged) {
     return (
       <div className="app app--login">
+        <div style={{ marginBottom: '50px' }}>
         <LoginScreen 
           onLogin={handleLogin}
           darkMode={darkMode}
           onToggleDarkMode={toggleDarkMode}
         />
+      </div>
+      
+      <p style={{ color:"#fff" }}>chattyChat is currently in [BETA]</p>
+      <p style={{ color:"#fff" }}>If your device has been wrongly detected, see other downloads.</p>
+      <p style={{ color:"#fff" }}>Please report any issues you encounter on GitHub.</p>
       </div>
     );
   }

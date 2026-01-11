@@ -60,8 +60,24 @@
     
     &__close {
       @include button-reset;
-      width: 32px;
-      height: 32px;
+      @include flex-center;
+      border-radius: $border-radius-md;
+      color: $light-text-muted;
+      @include smooth-transition(all);
+      
+      &:hover {
+        background: $light-bg-messages;
+        color: $light-text-primary;
+        
+        body.dark-mode & {
+          background: $dark-bg-messages;
+          color: $dark-text-primary;
+        }
+      }
+    }
+
+    &__pin {
+      @include button-reset;
       @include flex-center;
       border-radius: $border-radius-md;
       color: $light-text-muted;
