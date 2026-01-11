@@ -5,6 +5,8 @@ import { ChatContainer } from './features/chat/ChatContainer';
 import { UserProfile } from './features/profile/UserProfile';
 import { AppHeader } from './components/AppHeader';
 import { AppFooter } from './components/AppFooter';
+import { LeftSidebar } from './components/LeftSidebar';
+import { RightSidebar } from './components/RightSidebar';
 import { useSocket } from './hooks/useSocket';
 import { useDarkMode } from './hooks/useDarkMode';
 import { SOCKET_URL } from './utils/constants';
@@ -23,6 +25,11 @@ function App() {
   const [isLogged, setIsLogged] = useState(false);
   const [profileUser, setProfileUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
+  const [members, setMembers] = useState([]);
+  
+  // Sidebars state
+  const [leftSidebarOpen, setLeftSidebarOpen] = useState(false);
+  const [rightSidebarOpen, setRightSidebarOpen] = useState(true); // Open by default
   
   // Hooks custom
   const { darkMode, toggleDarkMode, setDarkModeValue } = useDarkMode();
@@ -41,8 +48,20 @@ function App() {
   useEffect(() => {
     if (isLogged && username) {
       loadUserProfile(username);
+      loadMembers();
     }
   }, [isLogged, username]);
+
+  // Recharger les membres régulièrement
+  useEffect(() => {
+    if (!isLogged) return;
+    
+    const interval = setInterval(() => {
+      loadMembers();
+    }, 10000); // Toutes les 10 secondes
+    
+    return () => clearInterval(interval);
+  }, [isLogged]);
 
   const loadUserProfile = async (user) => {
     try {
@@ -52,7 +71,6 @@ function App() {
       
       if (data.success) {
         setUserProfile(data.profile);
-        // Appliquer le dark mode du profil
         if (data.profile.dark_mode !== undefined) {
           setDarkModeValue(data.profile.dark_mode === 1);
         }
@@ -62,49 +80,56 @@ function App() {
     }
   };
 
-  // Rejoindre le chat
+  const loadMembers = async () => {
+    try {
+      const apiUrl = SOCKET_URL.replace(/:\d+$/, ':3001');
+      const response = await fetch(`${apiUrl}/api/members`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setMembers(data.members);
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des membres:', error);
+    }
+  };
+
   const handleLogin = (newUsername) => {
     setUsername(newUsername);
     joinChat(newUsername);
     setIsLogged(true);
-    
-    // Mettre le pseudo dans le titre de l'onglet
     document.title = `💬 ${newUsername} - Chat`;
   };
 
-  // Ouvrir le profil d'un utilisateur
   const handleUsernameClick = (clickedUsername) => {
     setProfileUser(clickedUsername);
   };
 
-  // Fermer le profil
   const handleCloseProfile = () => {
     setProfileUser(null);
   };
 
-  // Callback quand le profil est mis à jour
   const handleProfileUpdate = (updatedProfile) => {
     if (updatedProfile.username === username) {
       setUserProfile(updatedProfile);
       
-      // Mettre à jour le dark mode
       if (updatedProfile.dark_mode !== undefined) {
         setDarkModeValue(updatedProfile.dark_mode === 1);
       }
     }
+    // Recharger la liste des membres pour mettre à jour l'affichage
+    loadMembers();
   };
 
-  // Handler pour le bouton membres (TODO: implémenter sidebar)
-  const handleMembersClick = () => {
-    console.log('TODO: Ouvrir la sidebar des membres');
+  const handleMentionClick = (mentionedUsername) => {
+    // TODO: Ajouter @username dans l'input
+    console.log('TODO: Mention', mentionedUsername);
   };
 
-  // Handler pour le bouton settings (TODO: implémenter page settings)
   const handleSettingsClick = () => {
     console.log('TODO: Ouvrir les paramètres');
   };
 
-  // Afficher l'écran de connexion si pas encore connecté
   if (!isLogged) {
     return (
       <div className="app app--login">
@@ -117,30 +142,49 @@ function App() {
     );
   }
 
-  // Afficher le chat avec nouvelle structure
   return (
     <div className="app app--logged">
       <AppHeader 
         channelName="#general"
         channelDescription="Discussion générale"
         userCount={userCount}
-        onMembersClick={handleMembersClick}
+        onMembersClick={() => setRightSidebarOpen(!rightSidebarOpen)}
+        onChannelsClick={() => setLeftSidebarOpen(!leftSidebarOpen)}
+        leftSidebarOpen={leftSidebarOpen}
+        rightSidebarOpen={rightSidebarOpen}
       />
       
-      <ChatContainer 
-        username={username}
-        userCount={userCount}
-        messages={messages}
-        typingUsers={typingUsers}
-        darkMode={darkMode}
-        onToggleDarkMode={toggleDarkMode}
-        onSendMessage={sendMessage}
-        onTyping={emitTyping}
-        onStopTyping={emitStopTyping}
-        onUsernameClick={handleUsernameClick}
-        userProfile={userProfile}
-        onDeleteMessage={deleteMessage}
-      />
+      <div className="app-content">
+        <LeftSidebar
+          isOpen={leftSidebarOpen}
+          onClose={() => setLeftSidebarOpen(false)}
+          currentChannel="general"
+          onChannelClick={(channelId) => console.log('TODO: Switch to channel', channelId)}
+        />
+        
+        <ChatContainer 
+          username={username}
+          userCount={userCount}
+          messages={messages}
+          typingUsers={typingUsers}
+          darkMode={darkMode}
+          onToggleDarkMode={toggleDarkMode}
+          onSendMessage={sendMessage}
+          onTyping={emitTyping}
+          onStopTyping={emitStopTyping}
+          onUsernameClick={handleUsernameClick}
+          userProfile={userProfile}
+          onDeleteMessage={deleteMessage}
+        />
+        
+        <RightSidebar
+          members={members}
+          isOpen={rightSidebarOpen}
+          onClose={() => setRightSidebarOpen(false)}
+          onProfileClick={handleUsernameClick}
+          onMentionClick={handleMentionClick}
+        />
+      </div>
       
       <AppFooter 
         username={username}
