@@ -20,7 +20,7 @@ export const LoginScreen = ({onLogin}) => {
   return (
     <div className="login-screen">
       
-      <h1>💬 Chat en Temps Réel</h1>
+      <h1>chattyChat v0.1</h1>
       
       <form onSubmit={handleSubmit}>
         <input

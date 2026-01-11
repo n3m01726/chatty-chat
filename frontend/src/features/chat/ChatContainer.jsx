@@ -1,21 +1,17 @@
 // components/ChatContainer.jsx
 import React from 'react';
-import { ChatHeader } from './ChatHeader';
 import { MessageList } from './MessageList';
 import { TypingIndicator } from './TypingIndicator';
 import { MessageInput } from './MessageInput';
 
 /**
  * Container principal du chat (composition des composants)
+ * Header et Footer sont maintenant dans App.jsx
  */
 export const ChatContainer = ({
-  channelname,
   username,
-  userCount,
   messages,
   typingUsers,
-  darkMode,
-  onToggleDarkMode,
   onSendMessage,
   onTyping,
   onStopTyping,
@@ -25,17 +21,6 @@ export const ChatContainer = ({
 }) => {
   return (
     <div className="chat-container">
-      <ChatHeader 
-        channel_name='#general'
-        channel_description='Discussion générale'
-        username={username}
-        userCount={userCount}
-        darkMode={darkMode}
-        onToggleDarkMode={onToggleDarkMode}
-        onUsernameClick={onUsernameClick}
-        userProfile={userProfile}
-      />
-
       <MessageList 
         messages={messages}
         currentUsername={username}

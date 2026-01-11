@@ -1,0 +1,48 @@
+// ============================================
+// CHATTYCHAT - MAIN SCSS ENTRY POINT
+// ============================================
+
+// ============================================
+// UTILS
+// ============================================
+@import 'utils/variables';
+@import 'utils/functions';
+@import 'utils/mixins';
+
+// ============================================
+// GLOBALS
+// ============================================
+@import 'globals/reset';
+@import 'globals/typography';
+@import 'globals/base';
+
+// ============================================
+// THEMES
+// ============================================
+@import 'themes/light';
+@import 'themes/dark';
+
+// ============================================
+// LAYOUT
+// ============================================
+@import 'layout/container';
+@import 'layout/header';
+@import 'layout/footer';
+@import 'layout/sidebar';
+
+// ============================================
+// COMPONENTS
+// ============================================
+@import 'components/avatar';
+@import 'components/button';
+@import 'components/modal';
+@import 'components/message';
+
+// ============================================
+// FEATURES
+// ============================================
+@import 'features/auth';
+@import 'features/chat';
+@import 'features/profile';
+@import 'features/gif-picker';
+@import 'features/file-uploader';

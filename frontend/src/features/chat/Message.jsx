@@ -16,8 +16,8 @@ export const Message = ({ message, isOwn, onUsernameClick, userTimezone, onDelet
   // Message système (connexion/déconnexion)
   if (message.system) {
     return (
-      <div className="message system-message">
-        <p className="system-text">{message.text}</p>
+      <div className="message message--system">
+        <p className="message__text">{message.text}</p>
       </div>
     );
   }
@@ -41,32 +41,32 @@ export const Message = ({ message, isOwn, onUsernameClick, userTimezone, onDelet
 
   // Message normal
   return (
-    <div className={`message ${isOwn ? 'own-message' : ''}`}>
-      <div className="message-content">
+    <div className={`message ${isOwn ? 'message--own' : ''}`}>
+      <div className="message__content">
         <div 
-          className="avatar avatar-clickable" 
+          className="avatar avatar--clickable" 
           onClick={() => onUsernameClick && onUsernameClick(message.username)}
         >
           {avatarUrl ? (
             <img 
               src={avatarUrl} 
               alt={displayName} 
-              className="avatar avatar-medium"
+              className="avatar avatar--medium"
             />
           ) : (
-            <Avatar username={message.username} size="small" />
+            <Avatar username={message.username} size="small" clickable />
           )}
         </div>
-        <div className="message-bubble">
-          <div className="message-header">
+        <div className="message__bubble">
+          <div className="message__header">
             <span 
-              className="message-username clickable" 
+              className="message__username message__username--clickable" 
               style={{ color: userColor }}
               onClick={() => onUsernameClick && onUsernameClick(message.username)}
             >
               {displayName}
             </span>
-            <span className="message-time">
+            <span className="message__time">
               {formatTime(message.timestamp, userTimezone)}
             </span>
           </div>
@@ -74,7 +74,7 @@ export const Message = ({ message, isOwn, onUsernameClick, userTimezone, onDelet
           {/* Texte avec markdown si activé */}
           {message.text && (
             message.has_markdown ? (
-              <div className="message-text message-markdown">
+              <div className="message__text message__markdown">
                 <ReactMarkdown 
                   remarkPlugins={[remarkGfm, remarkBreaks]}
                   components={{
@@ -85,27 +85,27 @@ export const Message = ({ message, isOwn, onUsernameClick, userTimezone, onDelet
                 </ReactMarkdown>
               </div>
             ) : (
-              <p className="message-text">{message.text}</p>
+              <p className="message__text">{message.text}</p>
             )
           )}
 
           {/* GIF */}
           {message.gif_url && (
-            <div className="message-gif">
+            <div className="message__gif">
               <img src={message.gif_url} alt="GIF" />
             </div>
           )}
 
           {/* Attachment (image/vidéo) */}
           {attachmentUrl && (
-            <div className="message-attachment">
+            <div className="message__attachment">
               {message.attachment_type === 'image' ? (
                 <img src={attachmentUrl} alt="Attachment" />
               ) : (
                 <video src={attachmentUrl} controls />
               )}
               {message.attachment_expires_at && (
-                <small className="attachment-expires">
+                <small className="message__attachment-expires">
                   ⏱️ Expire le {new Date(message.attachment_expires_at).toLocaleString('fr-FR')}
                 </small>
               )}
@@ -114,33 +114,33 @@ export const Message = ({ message, isOwn, onUsernameClick, userTimezone, onDelet
 
           {/* Message d'expiration */}
           {isExpired && message.attachment_url && (
-            <div className="message-attachment-expired">
+            <div className="message__attachment-expired">
               📎 Fichier expiré et supprimé
             </div>
           )}
 
           {/* Bouton supprimer (seulement pour ses propres messages) */}
           {isOwn && (
-            <div className="message-actions">
+            <div className="message__actions">
               {!showDeleteConfirm ? (
                 <button
-                  className="btn-delete-message"
+                  className="message-actions__delete"
                   onClick={() => setShowDeleteConfirm(true)}
                   title="Supprimer ce message"
                 >
                   🗑️
                 </button>
               ) : (
-                <div className="delete-confirm">
+                <div className="message-actions__delete-confirm">
                   <span>Supprimer ?</span>
                   <button
-                    className="btn-confirm-delete"
+                    className="message-actions__confirm"
                     onClick={handleDelete}
                   >
                     ✓
                   </button>
                   <button
-                    className="btn-cancel-delete"
+                    className="message-actions__cancel"
                     onClick={() => setShowDeleteConfirm(false)}
                   >
                     ✕

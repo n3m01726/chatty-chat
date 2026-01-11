@@ -5,19 +5,16 @@ import { getInitials, stringToColor } from '../utils/formatters';
 /**
  * Composant Avatar avec initiales et couleur unique
  */
-export const Avatar = ({ username, size = 'medium' }) => {
+export const Avatar = ({ username, size = 'medium', clickable = false }) => {
   const initials = getInitials(username);
   const color = stringToColor(username);
 
-  const sizeClasses = {
-    small: 'avatar-small',
-    medium: 'avatar-medium',
-    large: 'avatar-large'
-  };
+  const sizeClass = `avatar--${size}`;
+  const clickableClass = clickable ? 'avatar--clickable' : '';
 
   return (
     <div 
-      className={`avatar ${sizeClasses[size]}`}
+      className={`avatar ${sizeClass} ${clickableClass}`.trim()}
       style={{ backgroundColor: color }}
       title={username}
     >

@@ -1,0 +1,46 @@
+// ============================================
+// AUTH FEATURE (Login) - ChattyChat
+// ============================================
+
+.login-screen {
+    @include card;
+    padding: $spacing-3xl;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    position: relative;
+    
+    h1 {
+      margin-bottom: $spacing-2xl;
+      color: $light-text-primary;
+      font-size: $font-size-3xl;
+      @include smooth-transition(color);
+      
+      body.dark-mode & {
+        color: $dark-text-primary;
+      }
+    }
+    
+    form {
+      @include flex-column;
+      gap: $spacing-lg;
+    }
+    
+    input {
+      @include input-base;
+      padding: $spacing-lg;
+      font-size: $font-size-lg;
+    }
+    
+    button {
+      padding: $spacing-lg;
+      @include gradient-primary;
+      color: $color-white;
+      border: none;
+      border-radius: $border-radius-md;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      cursor: pointer;
+      @include hover-lift;
+    }
+  }
