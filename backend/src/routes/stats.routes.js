@@ -1,22 +1,32 @@
+// routes/stats.routes.js
 const express = require('express');
 const router = express.Router();
-const userService = require('../services/userService');
 const messageService = require('../services/messageService');
+const userService = require('../services/userService');
 
+/**
+ * Routes pour les statistiques globales
+ */
+
+// GET /api/stats - Statistiques globales
 router.get('/', (req, res) => {
   try {
-    const stats = messageService.getStats();
+    const messageStats = messageService.getStats();
+    const userCount = userService.getAllUsersFromDb().length;
+    const onlineCount = userService.getUserCount();
+    
     res.json({
       success: true,
       stats: {
-        totalUsers: userService.getAllUsersFromDb().length,
-        onlineUsers: userService.getUserCount(),
-        totalMessages: stats.totalMessages,
-        topUsers: stats.topUsers
-      }
+        totalUsers: userCount,
+        onlineUsers: onlineCount,
+        totalMessages: messageStats.totalMessages,
+        topUsers: messageStats.topUsers,
+      },
     });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+  } catch (error) {
+    console.error('Erreur lors de la récupération des stats:', error);
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
