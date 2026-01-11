@@ -62,6 +62,7 @@
 - 2FA pour les comptes
 
 ### 🔑 Authentification
+- Last Login with avatar
 - Login Email / Password
 - Login Google
 - Login Discord
