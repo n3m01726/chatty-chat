@@ -47,6 +47,7 @@
 - Threads :
   - Répondre à un message spécifique
 - Recherche dans l’historique
+- Possibilité d'épingler des messages
 
 ### 😄 Interaction
 - Reactions sur messages (👍 ❤️ 😂)
