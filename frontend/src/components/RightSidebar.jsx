@@ -70,13 +70,6 @@ export const RightSidebar = ({
         {/* Header */}
         <div className="sidebar__header">
           <h3>Membres — {totalMembers}</h3>
-          <button 
-            className="sidebar__pin"
-            onClick={pinSidebar}
-            title="Épingler la sidebar"
-          >
-            <Pin size={20} />
-          </button>
         
         <button 
             className="sidebar__close"

@@ -179,7 +179,19 @@ class DatabaseService {
         this.db.exec(sql);
       }
     }
-
+    
+    const lifecycleColumns = [
+      { name: 'is_suspended', type: 'INTEGER', default: '0' },
+      { name: 'suspended_at', type: 'DATETIME', default: 'NULL' }
+    ];
+    
+    for (const column of lifecycleColumns) {
+      if (!existingUserColumns.includes(column.name)) {
+        const sql = `ALTER TABLE users ADD COLUMN ${column.name} ${column.type} DEFAULT ${column.default}`;
+        console.log(`  ➕ Ajout de la colonne users: ${column.name}`);
+        this.db.exec(sql);
+      }
+    }
     // Index
     this.db.exec(`
       CREATE INDEX IF NOT EXISTS idx_messages_created_at 
@@ -195,36 +207,39 @@ class DatabaseService {
       CREATE INDEX IF NOT EXISTS idx_messages_expires 
       ON messages(attachment_expires_at)
     `);
+
+    // Nouvelles colonnes pour l'authentification
+    const newAuthColumns = [
+      { name: 'email', type: 'TEXT', default: 'NULL' },
+      { name: 'password_hash', type: 'TEXT', default: 'NULL' },
+      { name: 'email_verified', type: 'INTEGER', default: '0' },
+      { name: 'last_login', type: 'DATETIME', default: 'NULL' },
+      { name: 'auth_provider', type: 'TEXT', default: "'local'" },
+      { name: 'provider_id', type: 'TEXT', default: 'NULL' },
+      { name: 'refresh_token', type: 'TEXT', default: 'NULL' }
+    ];
+
+    // Ajouter ces colonnes si elles n'existent pas
+    for (const column of newAuthColumns) {
+      if (!existingUserColumns.includes(column.name)) {
+        const sql = `ALTER TABLE users ADD COLUMN ${column.name} ${column.type} DEFAULT ${column.default}`;
+        console.log(`  ➕ Ajout de la colonne users: ${column.name}`);
+        this.db.exec(sql);
+      }
+    }
+
+    // Créer un index unique sur email
+    this.db.exec(`
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email 
+      ON users(email)
+    `);
   }
 
   /**
    * Récupère l'instance de la base de données
    */
   getDb() {
-    if (!this.db) {
-      throw new Error('Database not initialized. Call init() first.');
-    }
     return this.db;
-  }
-
-  /**
-   * Ferme la connexion à la base de données
-   */
-  close() {
-    if (this.db) {
-      this.db.close();
-      console.log('📦 Connexion à la base de données fermée');
-    }
-  }
-
-  /**
-   * Efface toutes les données (pour dev/test)
-   */
-  reset() {
-    this.db.exec('DELETE FROM messages');
-    this.db.exec('DELETE FROM users');
-    this.db.exec('DELETE FROM sqlite_sequence'); // Reset auto-increment
-    console.log('🗑️  Base de données réinitialisée');
   }
 }
 

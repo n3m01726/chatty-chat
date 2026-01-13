@@ -10,6 +10,7 @@ body {
   
   &.dark-mode {
     background: $dark-bg-body;
+    color:$dark-text-primary;
   }
 }
 

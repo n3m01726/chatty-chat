@@ -1,0 +1,139 @@
+:root {
+    color-scheme: light dark;   /* ← ESSENTIEL pour activer light-dark() */
+  
+    /* ============= COULEURS DE BASE (non-thémées) ============= */
+    --color-primary: #667eea;
+    --color-primary-dark: #5568d3;
+    --color-secondary: #764ba2;
+  
+    --color-success: #2ecc71;
+    --color-success-dark: #27ae60;
+    --color-warning: #f39c12;
+    --color-danger: #e74c3c;
+    --color-danger-dark: #c0392b;
+    --color-info: #3498db;
+    --color-info-dark: #2980b9;
+  
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-black-rgb: 0, 0, 0;   /* Pour les rgba transparents */
+  
+    --color-gray-50: #f8f9fa;
+    --color-gray-100: #f1f1f1;
+    --color-gray-200: #e0e0e0;
+    --color-gray-300: #ccc;
+    --color-gray-400: #999;
+    --color-gray-500: #666;
+    --color-gray-600: #333;
+    --color-gray-700: #95a5a6;
+    --color-gray-800: #7f8c8d;
+  
+    /* ============= VARIABLES SÉMANTIQUES AVEC light-dark() ============= */
+    --bg-body: light-dark(
+      linear-gradient(135deg, var(--color-primary), var(--color-secondary)),
+      linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)
+    );
+  
+    --bg-container: light-dark(var(--color-white), #2d2d44);
+    --bg-messages: light-dark(var(--color-gray-50), #1a1a2e);
+    --bg-input: light-dark(var(--color-white), #3a3a52);
+    --bg-secondary: light-dark(var(--color-white), #3a3a52); /* ex. pour panels secondaires */
+  
+    --border: light-dark(var(--color-gray-200), #3a3a52);
+    --border-secondary: light-dark(var(--color-gray-200), #4a4a62);
+  
+    --text-primary: light-dark(var(--color-gray-600), #e0e0e0);
+    --text-secondary: light-dark(var(--color-gray-400), #aaa);
+    --text-muted: light-dark(var(--color-gray-400), #999);
+  
+    /* ============= SHADOWS (rgba avec rgb var) ============= */
+    --shadow-sm: 0 2px 4px rgba(var(--color-black-rgb), 0.1);
+    --shadow-md: 0 2px 8px rgba(var(--color-black-rgb), 0.08);
+    --shadow-lg: 0 4px 12px rgba(var(--color-black-rgb), 0.15);
+    --shadow-xl: 0 20px 60px rgba(var(--color-black-rgb), 0.3);
+  
+    /* ============= LE RESTE (non concerné par light-dark) ============= */
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-2xl: 30px;
+    --spacing-3xl: 40px;
+  
+    /* Typo */
+    --font-family-base: "Whitney", system-ui, sans-serif;
+    --font-family-mono: 'Courier New', monospace;
+  
+    --font-size-xs: 11px;
+    --font-size-sm: 12px;
+    --font-size-base: 14px;
+    --font-size-md: 15px;
+    --font-size-lg: 16px;
+    --font-size-xl: 18px;
+    --font-size-2xl: 24px;
+    --font-size-3xl: 32px;
+  
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+  
+    --line-height-tight: 1.2;
+    --line-height-base: 1.5;
+    --line-height-relaxed: 1.6;
+  
+    /* Borders & Radius */
+    --border-width: 1px;
+    --border-width-thick: 2px;
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --border-radius-2xl: 20px;
+    --border-radius-3xl: 25px;
+    --border-radius-full: 50%;
+  
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+  
+    /* Z-index, breakpoints, layout, avatars... inchangés */
+    --z-index-dropdown: 100;
+    --z-index-modal: 1000;
+    --z-index-tooltip: 1100;
+    --z-index-notification: 1200;
+  
+    --breakpoint-xs: 480px;
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+    --breakpoint-2xl: 1536px;
+  
+    --container-max-width: 1400px;
+    --sidebar-width: 280px;
+  
+--sidebar-width-min: 200px;
+--sidebar-width-max: 400px;
+--sidebar-handle-width: 4px;
+--header-height: 70px;
+--footer-height: 70px;
+--input-height: 60px;
+
+// ============================================
+// AVATAR SIZES
+// ============================================
+--avatar-size-sm: 32px;
+--avatar-size-md: 40px;
+--avatar-size-lg: 56px;
+--avatar-size-xl: 80px;
+
+// ============================================
+// LIMITS
+// ============================================
+--max-message-width: 70%;
+--scrollbar-width: 8px;
+}

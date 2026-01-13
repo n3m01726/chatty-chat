@@ -250,17 +250,15 @@ export const UserProfile = ({
         </div>
         {/* Actions */}
         {!isOwn && (<>
-          <div className="channels__todo"> 📝 TODO </div>
-          
           <div className="profile__actions">
           
-              <button className="btn btn--primary icon-text">
+              <button className="btn btn--disabled icon-text">
                 <CircleDollarSign size={16}/>  Tips
               </button>
-              <button className="btn btn--primary icon-text">
+              <button className="btn btn--disabled icon-text">
                 <Webcam size={16}/>  Watch Free streams
               </button>
-              <button className="btn btn--primary icon-text">
+              <button className="btn btn--disabled icon-text">
                 <Heart size={16}/>
               </button>
           </div> </>
