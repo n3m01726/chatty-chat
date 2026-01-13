@@ -29,7 +29,11 @@
         background: $color-danger-dark;
       }
     }
-    
+    &--disabled {
+      background: $color-gray-100;
+      color: $color-gray-300;
+      cursor: not-allowed;
+    }    
     &--clear {
       background: transparent;
       color: $color-primary;

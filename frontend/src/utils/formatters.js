@@ -1,4 +1,11 @@
 // utils/formatters.js
+export const formatDate = (dateStr) => {
+  return new Date(dateStr).toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+};
 
 /**
  * Formate un timestamp ISO en heure locale (HH:MM)

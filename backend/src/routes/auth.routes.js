@@ -207,4 +207,121 @@ router.get('/discord', (req, res) => {
   });
 });
 
+/**
+ * PATCH /api/auth/complete-profile
+ * Ajouter email + password à un compte existant
+ */
+router.patch('/complete-profile', requireAuth, async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        error: 'Email et mot de passe requis'
+      });
+    }
+
+    const result = await authService.completeProfile(
+      req.user.id,
+      email,
+      password
+    );
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      error: 'Erreur serveur'
+    });
+  }
+});
+/**
+ * PATCH /api/auth/update-credentials
+ */
+router.patch('/update-credentials', requireAuth, async (req, res) => {
+  try {
+    const { currentPassword, email, newPassword } = req.body;
+
+    if (!currentPassword) {
+      return res.status(400).json({
+        success: false,
+        error: 'Mot de passe actuel requis'
+      });
+    }
+
+    const result = await authService.updateCredentials(
+      req.user.id,
+      currentPassword,
+      { email, newPassword }
+    );
+
+    if (!result.success) {
+      return res.status(401).json(result);
+    }
+
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      error: 'Erreur serveur'
+    });
+  }
+});
+/**
+ * DELETE /api/auth/me
+ */
+router.delete('/me', requireAuth, async (req, res) => {
+  try {
+    const { password } = req.body;
+
+    const result = await authService.deleteAccount(
+      req.user.id,
+      password
+    );
+
+    if (!result.success) {
+      return res.status(401).json(result);
+    }
+
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      error: 'Erreur serveur'
+    });
+  }
+});
+/**
+ * POST /api/auth/suspend
+ */
+router.post('/suspend', requireAuth, async (req, res) => {
+  try {
+    await authService.suspendAccount(req.user.id);
+
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      error: 'Erreur serveur'
+    });
+  }
+});
+
+
+
 module.exports = router;

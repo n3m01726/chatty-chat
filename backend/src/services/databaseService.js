@@ -179,7 +179,19 @@ class DatabaseService {
         this.db.exec(sql);
       }
     }
-
+    
+    const lifecycleColumns = [
+      { name: 'is_suspended', type: 'INTEGER', default: '0' },
+      { name: 'suspended_at', type: 'DATETIME', default: 'NULL' }
+    ];
+    
+    for (const column of lifecycleColumns) {
+      if (!existingUserColumns.includes(column.name)) {
+        const sql = `ALTER TABLE users ADD COLUMN ${column.name} ${column.type} DEFAULT ${column.default}`;
+        console.log(`  ➕ Ajout de la colonne users: ${column.name}`);
+        this.db.exec(sql);
+      }
+    }
     // Index
     this.db.exec(`
       CREATE INDEX IF NOT EXISTS idx_messages_created_at 

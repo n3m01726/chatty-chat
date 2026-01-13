@@ -179,7 +179,19 @@ class AuthService {
         error: `Ce compte utilise l'authentification ${user.auth_provider}` 
       };
     }
+
+    if (user.is_suspended) {
+      db.prepare(`
+        UPDATE users
+        SET is_suspended = 0, suspended_at = NULL
+        WHERE id = ?
+      `).run(user.id);
+    }
     
+    if (user.is_suspended) {
+  await unsuspendUser(user.id);
+}
+
     // Vérifier le mot de passe
     const passwordMatch = await this.comparePassword(password, user.password_hash);
     if (!passwordMatch) {
@@ -275,9 +287,130 @@ class AuthService {
     return db.prepare(`
       SELECT id, username, email, auth_provider 
       FROM users 
-      WHERE id = ?
+      WHERE id = ? AND is_suspended = 0
     `).get(userId);
   }
+
+async completeProfile(userId, email, password) {
+  const db = databaseService.db;
+
+  if (!this.validateEmail(email)) {
+    return { success: false, error: 'Email invalide' };
+  }
+
+  const passwordValidation = this.validatePassword(password);
+  if (!passwordValidation.valid) {
+    return { success: false, errors: passwordValidation.errors };
+  }
+
+  const user = db.prepare(`
+    SELECT email, password_hash 
+    FROM users 
+    WHERE id = ?
+  `).get(userId);
+
+  if (!user) {
+    return { success: false, error: 'Utilisateur introuvable' };
+  }
+
+  if (user.email || user.password_hash) {
+    return { success: false, error: 'Compte déjà complété' };
+  }
+
+  const existingEmail = db.prepare(
+    'SELECT id FROM users WHERE email = ?'
+  ).get(email);
+
+  if (existingEmail) {
+    return { success: false, error: 'Email déjà utilisé' };
+  }
+
+  const hash = await this.hashPassword(password);
+
+  db.prepare(`
+    UPDATE users
+    SET email = ?, password_hash = ?, last_login = CURRENT_TIMESTAMP
+    WHERE id = ?
+  `).run(email, hash, userId);
+
+  return { success: true };
+} 
+async updateCredentials(userId, currentPassword, { email, newPassword }) {
+  const db = databaseService.db;
+
+  const user = db.prepare(`
+    SELECT password_hash, email 
+    FROM users 
+    WHERE id = ?
+  `).get(userId);
+
+  if (!user || !user.password_hash) {
+    return { success: false, error: 'Compte incomplet' };
+  }
+
+  const valid = await this.comparePassword(currentPassword, user.password_hash);
+  if (!valid) {
+    return { success: false, error: 'Mot de passe incorrect' };
+  }
+
+  if (email) {
+    if (!this.validateEmail(email)) {
+      return { success: false, error: 'Email invalide' };
+    }
+
+    const used = db.prepare(
+      'SELECT id FROM users WHERE email = ? AND id != ?'
+    ).get(email, userId);
+
+    if (used) {
+      return { success: false, error: 'Email déjà utilisé' };
+    }
+  }
+
+  let passwordHash = null;
+  if (newPassword) {
+    const validation = this.validatePassword(newPassword);
+    if (!validation.valid) {
+      return { success: false, errors: validation.errors };
+    }
+    passwordHash = await this.hashPassword(newPassword);
+  }
+
+  db.prepare(`
+    UPDATE users SET
+      email = COALESCE(?, email),
+      password_hash = COALESCE(?, password_hash)
+    WHERE id = ?
+  `).run(email || null, passwordHash, userId);
+
+  return { success: true };
+}
+async deleteAccount(userId, password) {
+  const db = databaseService.db;
+
+  const user = db.prepare(`
+    SELECT password_hash 
+    FROM users 
+    WHERE id = ?
+  `).get(userId);
+
+  if (!user || !user.password_hash) {
+    return { success: false, error: 'Mot de passe requis' };
+  }
+
+  const valid = await this.comparePassword(password, user.password_hash);
+  if (!valid) {
+    return { success: false, error: 'Mot de passe incorrect' };
+  }
+
+  db.prepare(`DELETE FROM users WHERE id = ?`).run(userId);
+
+  return { success: true };
 }
 
-module.exports = new AuthService();
+
+
+
+
+}
+  module.exports = new AuthService();

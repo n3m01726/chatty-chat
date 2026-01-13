@@ -352,39 +352,4 @@
     }
   }
   
-  // ============================================
-  // MOBILE RESPONSIVE
-  // ============================================
   
-  @include respond-to(md) {
-    .sidebar {
-      position: fixed;
-      top: $header-height;
-      bottom: $footer-height;
-      z-index: z('modal');
-      box-shadow: $shadow-xl;
-      
-      &--left {
-        left: 0;
-        
-        &.sidebar--collapsed {
-          transform: translateX(-100%);
-        }
-      }
-      
-      &--right {
-        right: 0;
-        
-        &.sidebar--collapsed {
-          transform: translateX(100%);
-        }
-      }
-    }
-    
-    .sidebar-overlay {
-      @include absolute-cover;
-      background: opacity($color-black, 0.5);
-      z-index: calc(z('modal') - 1);
-      @include fade-in;
-    }
-  }

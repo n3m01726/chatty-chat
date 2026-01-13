@@ -1,5 +1,5 @@
 // contexts/AuthContext.jsx
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useRef } from 'react';
 import { SOCKET_URL } from '../utils/constants';
 
 const AuthContext = createContext(null);
@@ -11,36 +11,53 @@ export const AuthProvider = ({ children }) => {
 
   const apiUrl = SOCKET_URL.replace(/:\d+$/, ':3001');
 
-  // Charger le dernier email depuis les cookies au démarrage
+  // Empêche le double appel en dev (React StrictMode)
+  const hasCheckedAuth = useRef(false);
+
   useEffect(() => {
+    if (hasCheckedAuth.current) return;
+    hasCheckedAuth.current = true;
+
+    // Charger lastEmail
     const cookies = document.cookie.split(';');
-    const lastEmailCookie = cookies.find(c => c.trim().startsWith('lastEmail='));
+    const lastEmailCookie = cookies.find(c =>
+      c.trim().startsWith('lastEmail=')
+    );
+
     if (lastEmailCookie) {
-      const email = lastEmailCookie.split('=')[1];
-      setLastEmail(decodeURIComponent(email));
+      setLastEmail(decodeURIComponent(lastEmailCookie.split('=')[1]));
     }
-    
-    // Vérifier si déjà authentifié
+
     checkAuth();
   }, []);
 
   const checkAuth = async () => {
     try {
       const response = await fetch(`${apiUrl}/api/auth/me`, {
-        credentials: 'include' // Important pour envoyer les cookies
+        credentials: 'include'
       });
 
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
           setUser(data.user);
+          return;
+        }
+      }
+
+      // Tentative de refresh UNIQUEMENT si un refresh token existe
+      const hasRefreshToken = document.cookie.includes('refreshToken=');
+      if (hasRefreshToken) {
+        const refreshed = await refreshToken();
+        if (!refreshed) {
+          setUser(null);
         }
       } else {
-        // Essayer de refresh le token
-        await refreshToken();
+        setUser(null);
       }
     } catch (error) {
       console.error('Erreur vérification auth:', error);
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -53,10 +70,21 @@ export const AuthProvider = ({ children }) => {
         credentials: 'include'
       });
 
-      if (response.ok) {
-        await checkAuth();
-        return true;
+      if (!response.ok) return false;
+
+      // Revalider l’utilisateur après refresh
+      const meResponse = await fetch(`${apiUrl}/api/auth/me`, {
+        credentials: 'include'
+      });
+
+      if (meResponse.ok) {
+        const data = await meResponse.json();
+        if (data.success) {
+          setUser(data.user);
+          return true;
+        }
       }
+
       return false;
     } catch (error) {
       console.error('Erreur refresh token:', error);
@@ -74,12 +102,12 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
         return { success: false, error: data.error || data.errors };
       }
 
-      return { success: true, user: data.user };
+      return { success: true };
     } catch (error) {
       console.error('Erreur inscription:', error);
       return { success: false, error: 'Erreur serveur' };
@@ -96,7 +124,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
         return { success: false, error: data.error };
       }

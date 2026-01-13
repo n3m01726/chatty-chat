@@ -45,6 +45,16 @@
     font-size: $font-size-base;
   }
   
+&__statusText {
+    font-size: $font-size-sm;
+    color: $light-text-primary;
+    font-style: italic;
+    
+    body.dark-mode & {
+      color: $dark-text-secondary;
+    }
+  }
+
   &__actions {
     @include flex-center;
     gap: $spacing-md;
