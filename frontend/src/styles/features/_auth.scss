@@ -1,6 +1,9 @@
 // ============================================
 // AUTH FEATURE (Login/Register) - ChattyChat
 // ============================================
+@use 'sass:color';
+@use '../utils' as *;
+
 
 .login-screen {
   @include card;
@@ -55,7 +58,7 @@
 
 // Auth errors
 .auth-error {
-  background: lighten($color-danger, 40%);
+  background: color.scale($color-danger, $lightness: -20%);
   color: $color-danger;
   padding: $spacing-md $spacing-lg;
   border-radius: $border-radius-md;
@@ -197,7 +200,7 @@
     color: $color-purple;
     
     &:hover {
-      color: lighten($color-purple, 10%);
+      color: color.scale($color-purple, $lightness: 10%);
     }
   }
 }

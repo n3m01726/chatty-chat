@@ -1,6 +1,9 @@
 // ============================================
 // FOOTER LAYOUT - ChattyChat
 // ============================================
+@use 'sass:color';
+@use '../utils' as *;
+
 
 .app-footer {
   background: $light-bg-container;
@@ -87,7 +90,7 @@
     
     &--logout {
       &:hover {
-        background: lighten($color-danger, 40%);
+        background: color.scale($color-danger, $lightness: 40%);
         color: $color-danger;
         
         body.dark-mode & {

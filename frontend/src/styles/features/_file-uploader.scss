@@ -2,6 +2,9 @@
 // FILE UPLOADER FEATURE - ChattyChat
 // ============================================
 
+@use '../utils' as *;
+
+
 .attachment-uploader {
     &__overlay {
       @include modal-overlay;

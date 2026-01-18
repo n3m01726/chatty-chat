@@ -2,6 +2,9 @@
 // BUTTON COMPONENT - ChattyChat
 // ============================================
 
+@use '../utils' as *;
+
+
 .btn {
     @include button-base;
     

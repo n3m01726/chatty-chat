@@ -1,9 +1,12 @@
 // ============================================
 // SIDEBAR LAYOUT - ChattyChat
 // ============================================
+@use 'sass:color';
+@use '../utils' as *;
+
 
 .sidebar {
-    background: darken($light-bg-container, 3%);
+    background: color.scale($light-bg-container, $lightness: 3%);
     border-right: $border-width solid $light-border;
     @include flex-column;
     position: relative;
@@ -11,7 +14,7 @@
     overflow: hidden;
     
     body.dark-mode & {
-      background: darken($dark-bg-container, 2%);
+      background: color.scale($dark-bg-container, $lightness: -2%);
       border-right-color: $dark-border;
     }
     
@@ -234,12 +237,12 @@
     
     &__name {
       font-weight: $font-weight-semibold;
-      font-size: $font-size-sm;
+      font-size: $font-size-md;
       @include text-truncate;
     }
     
     &__status-text {
-      font-size: $font-size-xs;
+      font-size: $font-size-sm;
       color: $light-text-muted;
       @include text-truncate;
       

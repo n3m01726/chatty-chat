@@ -2,6 +2,9 @@
 // GIF PICKER FEATURE - ChattyChat
 // ============================================
 
+@use '../utils' as *;
+
+
 .gif-picker {
     &__overlay {
       @include modal-overlay;

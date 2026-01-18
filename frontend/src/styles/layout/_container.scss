@@ -2,6 +2,9 @@
 // CONTAINER LAYOUT - ChattyChat
 // ============================================
 
+@use '../utils' as *;
+
+
 .chat-container {
   flex: 1;
   @include flex-column;

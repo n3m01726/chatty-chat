@@ -61,22 +61,41 @@ class DatabaseService {
   createTables() {
     // Table des utilisateurs (complète)
     this.db.exec(`
-      CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE NOT NULL,
-        display_name TEXT,
-        bio TEXT,
-        pronouns TEXT,
-        custom_color TEXT,
-        avatar_url TEXT,
-        banner_url TEXT,
-        status TEXT DEFAULT 'online',
-        status_text TEXT,
-        timezone TEXT DEFAULT 'UTC',
-        dark_mode INTEGER DEFAULT 0,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        last_seen DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+  -- identité
+  username TEXT UNIQUE NOT NULL,
+  email TEXT UNIQUE,
+  display_name TEXT,
+  bio TEXT,
+  pronouns TEXT,
+
+  -- auth
+  password_hash TEXT,
+  email_verified INTEGER DEFAULT 0,
+  auth_provider TEXT DEFAULT 'local',
+  provider_id TEXT,
+  refresh_token TEXT,
+  last_login DATETIME,
+
+  -- profil
+  custom_color TEXT,
+  avatar_url TEXT,
+  banner_url TEXT,
+
+  -- état
+  status TEXT DEFAULT 'online',
+  status_text TEXT,
+  timezone TEXT DEFAULT 'UTC',
+  dark_mode INTEGER DEFAULT 0,
+  is_suspended INTEGER DEFAULT 0,
+  suspended_at DATETIME,
+
+  -- lifecycle
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  last_seen DATETIME DEFAULT CURRENT_TIMESTAMP
+)
     `);
 
     // Table des messages (étendue)

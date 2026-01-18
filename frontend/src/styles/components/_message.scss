@@ -2,6 +2,9 @@
 // MESSAGE COMPONENT - ChattyChat
 // ============================================
 
+@use '../utils' as *;
+
+
 .message {
     margin-bottom: $spacing-xl;
     @include slide-up(0.3s);

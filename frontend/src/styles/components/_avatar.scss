@@ -2,6 +2,8 @@
 // AVATAR COMPONENT - ChattyChat
 // ============================================
 
+@use '../utils' as *;
+
 .avatar {
     border-radius: $border-radius-full;
     @include flex-center;
@@ -10,6 +12,7 @@
     flex-shrink: 0;
     user-select: none;
     box-shadow: $shadow-sm;
+    
     
     // Sizes
     &--small {

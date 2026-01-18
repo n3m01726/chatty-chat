@@ -2,6 +2,9 @@
 // MODAL COMPONENT - ChattyChat
 // ============================================
 
+@use '../utils' as *;
+
+
 .modal {
     &__overlay {
       @include modal-overlay;

@@ -1,0 +1,139 @@
+🧠 Structure du projet :
+───────────────────────────
+├── .gitignore
+├── CLAUDE.MD
+├── ROADMAP.md
+├── backend
+│   ├── data
+│   │   ├── chat.db
+│   │   ├── chat.db-shm
+│   │   └── chat.db-wal
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── src
+│   │   ├── config
+│   │   │   ├── auth.config.js
+│   │   │   └── config.js
+│   │   ├── handlers
+│   │   │   └── socketHandlers.js
+│   │   ├── middleware
+│   │   │   └── authMiddleware.js
+│   │   ├── routes
+│   │   │   ├── api.js
+│   │   │   ├── auth.routes.js
+│   │   │   ├── giphy.routes.js
+│   │   │   ├── members.routes.js
+│   │   │   ├── messages.routes.js
+│   │   │   ├── stats.routes.js
+│   │   │   └── users.routes.js
+│   │   ├── server.js
+│   │   └── services
+│   │       ├── authService.js
+│   │       ├── databaseService.js
+│   │       ├── giphyService.js
+│   │       ├── messageService.js
+│   │       ├── uploadService.js
+│   │       └── userService.js
+│   └── uploads
+│       ├── avatar-1767807170415-168831967.png
+│       ├── avatar-1767985971199-96363659.png
+│       ├── avatar-1767991843259-490519598.png
+│       ├── avatar-1768004794924-584325722.png
+│       ├── avatar-1768005075887-138224849.png
+│       ├── avatar-1768247767102-838128545.png
+│       ├── banner-1767807184273-326949142.png
+│       ├── banner-1767985997030-246016108.png
+│       ├── banner-1767991857509-579635413.jpg
+│       ├── banner-1768004817421-376382219.png
+│       ├── banner-1768005081433-607126934.png
+│       └── banner-1768247800068-369100739.jpg
+├── css-styles
+│   └── variables.css
+├── frontend
+│   ├── README.md
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── src
+│   │   ├── App.jsx
+│   │   ├── components
+│   │   │   ├── AppFooter.jsx
+│   │   │   ├── AppHeader.jsx
+│   │   │   ├── Avatar.jsx
+│   │   │   ├── DarkModeToggle.jsx
+│   │   │   ├── LeftSidebar.jsx
+│   │   │   ├── MemberItem.jsx
+│   │   │   ├── RightSidebar.jsx
+│   │   │   └── UserMiniProfile.jsx
+│   │   ├── contexts
+│   │   │   └── AuthContext.jsx
+│   │   ├── features
+│   │   │   ├── auth
+│   │   │   │   ├── LoginScreen.jsx
+│   │   │   │   └── RegisterScreen.jsx
+│   │   │   ├── chat
+│   │   │   │   ├── AttachmentUploader.jsx
+│   │   │   │   ├── ChatContainer.jsx
+│   │   │   │   ├── ChatHeader.jsx
+│   │   │   │   ├── GifPicker.jsx
+│   │   │   │   ├── Message.jsx
+│   │   │   │   ├── MessageInput.jsx
+│   │   │   │   ├── MessageList.jsx
+│   │   │   │   └── TypingIndicator.jsx
+│   │   │   └── profile
+│   │   │       └── UserProfile.jsx
+│   │   ├── hooks
+│   │   │   ├── useDarkMode.js
+│   │   │   ├── useResizable.js
+│   │   │   ├── useSocket.js
+│   │   │   └── useUserProfile.js
+│   │   ├── main.jsx
+│   │   ├── styles
+│   │   │   ├── components
+│   │   │   │   ├── _avatar.scss
+│   │   │   │   ├── _button.scss
+│   │   │   │   ├── _message.scss
+│   │   │   │   ├── _mini-profile.scss
+│   │   │   │   └── _modal.scss
+│   │   │   ├── features
+│   │   │   │   ├── _auth.scss
+│   │   │   │   ├── _chat.scss
+│   │   │   │   ├── _file-uploader.scss
+│   │   │   │   ├── _gif-picker.scss
+│   │   │   │   └── _profile.scss
+│   │   │   ├── globals
+│   │   │   │   ├── _animations.scss
+│   │   │   │   ├── _base.scss
+│   │   │   │   ├── _reset.scss
+│   │   │   │   └── _typography.scss
+│   │   │   ├── index.scss
+│   │   │   ├── layout
+│   │   │   │   ├── _container.scss
+│   │   │   │   ├── _footer.scss
+│   │   │   │   ├── _header.scss
+│   │   │   │   └── _sidebar.scss
+│   │   │   ├── themes
+│   │   │   │   ├── _dark.scss
+│   │   │   │   └── _light.scss
+│   │   │   └── utils
+│   │   │       ├── _functions.scss
+│   │   │       ├── _mixins.scss
+│   │   │       └── _variables.scss
+│   │   └── utils
+│   │       ├── constants.js
+│   │       └── formatters.js
+│   └── vite.config.js
+└── tree.js
+
+
+📂 **Fichiers recommandés pour comprendre le projet**
+──────────────────────────────────────────────
+❌ (manquant) index.js
+❌ (manquant) core/startup.js
+❌ (manquant) core/bot.js
+❌ (manquant) core/lifecycle.js
+❌ (manquant) api/server.js
+❌ (manquant) api/routes.js
+❌ (manquant) utils/logger.js
+❌ (manquant) utils/errorHandler.js
+❌ (manquant) core/loadFiles.js

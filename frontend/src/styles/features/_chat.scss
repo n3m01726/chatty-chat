@@ -2,6 +2,9 @@
 // CHAT FEATURE - ChattyChat
 // ============================================
 
+@use '../utils' as *;
+
+
 // Typing indicator
 .typing-indicator {
     padding: $spacing-md $spacing-xl;

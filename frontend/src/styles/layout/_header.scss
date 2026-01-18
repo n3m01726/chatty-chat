@@ -2,6 +2,9 @@
 // HEADER LAYOUT - ChattyChat
 // ============================================
 
+@use '../utils' as *;
+
+
 // Global Header (Top Bar)
 .app-header {
   @include gradient-primary;

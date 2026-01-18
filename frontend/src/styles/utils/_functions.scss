@@ -1,6 +1,9 @@
 // ============================================
 // FUNCTIONS - ChattyChat
 // ============================================
+@use 'sass:map';
+@use '../utils/variables' as *;
+
 
 // ============================================
 // SPACING CALCULATOR
@@ -19,6 +22,8 @@
   // ============================================
   // Z-INDEX MANAGEMENT
   // ============================================
+
+
   @function z($layer) {
     $z-layers: (
       'base': 1,
@@ -28,5 +33,5 @@
       'notification': $z-index-notification
     );
     
-    @return map-get($z-layers, $layer);
+    @return map.get($z-layers, $layer);
   }

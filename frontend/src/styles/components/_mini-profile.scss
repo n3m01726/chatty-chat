@@ -1,5 +1,8 @@
 // components/_mini-profile.scss
 
+@use '../utils' as *;
+
+
 .mini-profile-overlay {
     position: fixed;
     inset: 0;

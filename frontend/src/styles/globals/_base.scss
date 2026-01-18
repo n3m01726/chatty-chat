@@ -2,6 +2,9 @@
 // BASE - ChattyChat
 // ============================================
 
+@use '../utils' as *;
+
+
 body {
   background: $light-bg-body;
   height: 100vh;

@@ -2,6 +2,9 @@
 // PROFILE FEATURE - ChattyChat
 // ============================================
 
+@use '../utils' as *;
+
+
 .user-profile-modal {
   max-width: 500px;
 }
@@ -13,7 +16,7 @@
     background-position: center;
     border-radius: $border-radius-xl $border-radius-xl 0 0;
     position: relative;
-    margin: -$spacing-2xl -$spacing-2xl 0 -$spacing-2xl;
+    margin: - $spacing-2xl - $spacing-2xl 0 - $spacing-2xl;
   }
   
   &__header-with-avatar {
@@ -36,9 +39,11 @@
     border: 4px solid $color-white;
     box-shadow: $shadow-lg;
     object-fit: cover;
+    background-color: $light-bg-container;
     
     body.dark-mode & {
       border-color: $dark-bg-container;
+      background-color: $dark-bg-container;
     }
   }
   
